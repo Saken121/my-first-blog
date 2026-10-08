@@ -2,7 +2,8 @@
 (() => {
   'use strict';
   const KEY='forma.referee.v1';
-  const KINDS={endurance:'Bieg spokojny',intervals:'Interwały',speed:'Szybkość i sprinty',strength:'Siła',mobility:'Mobilność',recovery:'Regeneracja aktywna',cycling:'Rower',test:'Test sprawnościowy',match_iii:'Mecz · III liga',match_district:'Mecz · liga okręgowa',match_assistant:'Mecz · sędzia asystent',other:'Inna aktywność'};
+  const KINDS={endurance:'Bieg spokojny',recovery_run:'Bieg regeneracyjny',recovery_stretch:'Rozciąganie regeneracyjne',starts:'Starty biegowe',short_sprints:'Krótkie sprinty',fast_intervals:'Szybkie biegi interwałowe',tempo_intervals:'Interwały tempowe',tempo_run:'Bieg tempowy',intervals:'Interwały',speed:'Szybkość i sprinty',strength:'Siła',mobility:'Mobilność',recovery:'Regeneracja aktywna',cycling:'Rower',test:'Test sprawnościowy',match_iii:'Mecz · III liga',match_district:'Mecz · liga okręgowa',match_assistant:'Mecz · sędzia asystent',other:'Inna aktywność'};
+  const RUNNING_KINDS=new Set(['endurance','recovery_run','starts','short_sprints','fast_intervals','tempo_intervals','tempo_run','intervals','speed']);
   const clone=value=>JSON.parse(JSON.stringify(value));
   const isMatch=a=>a.kind.startsWith('match_');
   const defaults=()=>({version:1,nextId:1,profile:{hr_max:199,hr_lthr:177,hr_rest:57,threshold_power:411,power_sport:'running',zone_limits:[150,159,168,176]},activities:[]});
@@ -98,13 +99,14 @@
     const done=activities.filter(a=>a.status==='done'),types=new Map(),weeks=new Map(),times=[0,0,0,0,0];let weighted=0,covered=0;
     for(const a of done) {
       zones(a,profile.zone_limits).forEach((s,i)=>times[i]+=s);
-      const type=types.get(a.kind)||{kind:a.kind,label:KINDS[a.kind],count:0,minutes:0};type.count++;type.minutes+=a.duration_seconds/60;types.set(a.kind,type);
+      const type=types.get(a.kind)||{kind:a.kind,label:KINDS[a.kind],count:0,minutes:0,distance_km:0};type.count++;type.minutes+=a.duration_seconds/60;type.distance_km+=a.distance_km;types.set(a.kind,type);
       const date=new Date(a.date+'T12:00:00Z'),key=shift(a.date,-(date.getUTCDay()+6)%7);
       const week=weeks.get(key)||{date:key,load:0,minutes:0,count:0,unrated:0};week.minutes+=a.duration_seconds/60;week.count++;if(a.rpe)week.load+=a.duration_seconds/60*a.rpe;else week.unrated++;weeks.set(key,week);
       for(const [hr,seconds] of a.hr_segments){weighted+=hr*seconds;covered+=seconds;}
     }
     const total=done.reduce((sum,a)=>sum+a.duration_seconds,0);
-    return {completed:done.length,planned:activities.filter(a=>a.status==='planned').length,matches:done.filter(isMatch).length,minutes:Math.round(total/60*10)/10,distance_km:Math.round(done.reduce((s,a)=>s+a.distance_km,0)*100)/100,load:Math.round(done.reduce((s,a)=>s+(a.rpe?a.duration_seconds/60*a.rpe:0),0)),unrated:done.filter(a=>!a.rpe).length,avg_hr:covered?roundEven(weighted/covered):null,max_hr:done.reduce((max,a)=>a.max_hr?Math.max(max||0,a.max_hr):max,null),zones_seconds:times,unknown_hr_seconds:Math.max(0,total-times.reduce((x,y)=>x+y,0)),types:[...types.values()],weeks:[...weeks.values()].sort((a,b)=>a.date.localeCompare(b.date))};
+    const matchDistance=done.filter(isMatch).reduce((s,a)=>s+a.distance_km,0),trainingDistance=done.filter(a=>!isMatch(a)&&RUNNING_KINDS.has(a.kind)).reduce((s,a)=>s+a.distance_km,0),runningDistance=matchDistance+trainingDistance;
+    return {completed:done.length,planned:activities.filter(a=>a.status==='planned').length,matches:done.filter(isMatch).length,minutes:Math.round(total/60*10)/10,distance_km:Math.round(runningDistance*100)/100,match_distance_km:Math.round(matchDistance*100)/100,training_distance_km:Math.round(trainingDistance*100)/100,running_distance_km:Math.round(runningDistance*100)/100,load:Math.round(done.reduce((s,a)=>s+(a.rpe?a.duration_seconds/60*a.rpe:0),0)),unrated:done.filter(a=>!a.rpe).length,avg_hr:covered?roundEven(weighted/covered):null,max_hr:done.reduce((max,a)=>a.max_hr?Math.max(max||0,a.max_hr):max,null),zones_seconds:times,unknown_hr_seconds:Math.max(0,total-times.reduce((x,y)=>x+y,0)),types:[...types.values()],weeks:[...weeks.values()].sort((a,b)=>a.date.localeCompare(b.date))};
   }
   function microcycle(day,matches) {
     const dates=[...new Set(matches.map(a=>a.date))].sort();

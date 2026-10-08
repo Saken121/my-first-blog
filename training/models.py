@@ -4,6 +4,13 @@ from django.db import models
 
 KINDS = {
     'endurance': 'Bieg spokojny',
+    'recovery_run': 'Bieg regeneracyjny',
+    'recovery_stretch': 'Rozciąganie regeneracyjne',
+    'starts': 'Starty biegowe',
+    'short_sprints': 'Krótkie sprinty',
+    'fast_intervals': 'Szybkie biegi interwałowe',
+    'tempo_intervals': 'Interwały tempowe',
+    'tempo_run': 'Bieg tempowy',
     'intervals': 'Interwały',
     'speed': 'Szybkość i sprinty',
     'strength': 'Siła',

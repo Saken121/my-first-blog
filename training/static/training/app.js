@@ -16,6 +16,19 @@ const shortDay = key => parseDate(key).toLocaleDateString('pl-PL',{day:'numeric'
 const activitiesOn = key => data.activities.filter(a=>a.date===key);
 const labelOf = a => a.title || a.kind_label;
 const icon = name => `<svg aria-hidden="true"><use href="#i-${name}"/></svg>`;
+const RUNNING_KINDS=new Set(['endurance','recovery_run','starts','short_sprints','fast_intervals','tempo_intervals','tempo_run','intervals','speed']);
+const RUNNING_CATEGORIES=[
+  {label:'Bieg spokojny',kinds:['endurance'],note:'Spokojna praca tlenowa'},
+  {label:'Bieg regeneracyjny',kinds:['recovery_run'],note:'Lekki bieg połączony z regeneracją'},
+  {label:'Starty biegowe',kinds:['starts'],note:'Krótkie starty i pierwsze kroki'},
+  {label:'Krótkie sprinty',kinds:['short_sprints'],note:'Krótkie odcinki szybkościowe'},
+  {label:'Szybkie biegi interwałowe',kinds:['fast_intervals'],note:'Szybkie powtarzane odcinki'},
+  {label:'Interwały tempowe',kinds:['tempo_intervals'],note:'Dłuższe odcinki w tempie'},
+  {label:'Bieg tempowy',kinds:['tempo_run'],note:'Ciągła praca w tempie'},
+  {label:'Interwały',kinds:['intervals'],note:'Dotychczasowa, ogólna kategoria interwałów'},
+  {label:'Szybkość i sprinty',kinds:['speed'],note:'Dotychczasowa, ogólna kategoria szybkości'},
+  {label:'Rozciąganie regeneracyjne',kinds:['recovery_stretch'],note:'Regeneracja i zakres ruchu'}
+];
 
 function notify(message) {
   $('#toast').textContent = message; $('#toast').hidden = false;
@@ -48,12 +61,14 @@ function render() {
   $('#metric-count').textContent=data.summary.completed;
   $('#metric-planned').textContent=`${data.summary.planned} ${data.summary.planned===1?'aktywność w planie':'aktywności w planie'}`;
   $('#metric-time').textContent=time(data.summary.minutes);
-  $('#metric-distance').innerHTML=`${num(data.summary.distance_km,1)} <small>km</small>`;
+  $('#metric-match-distance').textContent=num(data.summary.match_distance_km,1);
+  $('#metric-training-distance').textContent=num(data.summary.training_distance_km,1);
+  $('#metric-distance').textContent=num(data.summary.distance_km,1);
   $('#metric-matches').textContent=`${data.summary.matches} wykonanych meczów w tym miesiącu`;
   $('#metric-load').innerHTML=`${num(data.summary.load)} <small>AU</small>`;
   $('#metric-rpe').textContent=data.summary.unrated ? `${data.summary.unrated} wykonanych aktywności bez RPE` : 'Czas w minutach × odczuwany wysiłek';
   $('#activity-kind').innerHTML=Object.entries(data.kinds).map(([key,value])=>`<option value="${key}">${esc(value)}</option>`).join('');
-  renderCalendar(); renderDay(); renderAnalysis(); renderCycles();
+  renderCalendar(); renderDay(); renderAnalysis(); renderRunningAnalysis(); renderCycles();
 }
 function renderCalendar() {
   const first=parseDate(month+'-01'), offset=(first.getDay()+6)%7;
@@ -109,6 +124,27 @@ function renderAnalysis() {
   $('#weekly-chart').innerHTML=weeks.length?weeks.map(w=>`<div class="weekly-row"><span>Od ${shortDay(w.date)}<small>${time(w.minutes)}</small></span><div class="weekly-track"><div class="weekly-fill" style="width:${w.load/maximum*100}%"></div></div><span class="weekly-value">${num(w.load)}<small>AU${w.unrated?` · ${w.unrated} bez RPE`:''}</small></span></div>`).join(''):'<div class="empty-state">Obciążenie pojawi się po zapisaniu wykonanych aktywności z oceną RPE.</div>';
   renderTable();
 }
+function renderRunningAnalysis() {
+  const types=data.summary.types;
+  const sumFor=kinds=>types.filter(t=>kinds.includes(t.kind)).reduce((total,t)=>({count:total.count+t.count,minutes:total.minutes+t.minutes,distance:total.distance+t.distance_km}),{count:0,minutes:0,distance:0});
+  const run=sumFor([...RUNNING_KINDS]);
+  const quality=sumFor(['starts','short_sprints','fast_intervals','tempo_intervals','tempo_run','intervals','speed']);
+  $('#running-overview').innerHTML=`<div><strong>${num(data.summary.training_distance_km,1)} km</strong>Dystans biegowy na treningu</div><div><strong>${run.count}</strong>Treningi biegowe</div><div><strong>${quality.count}</strong>Treningi szybkościowe i tempowe</div><div><strong>${time(run.minutes)}</strong>Czas w biegu</div>`;
+  const totalDistance=data.summary.training_distance_km||0;
+  const rows=RUNNING_CATEGORIES.map(category=>{
+    const stats=sumFor(category.kinds),width=totalDistance?Math.min(100,stats.distance/totalDistance*100):0;
+    return `<div class="running-type-row"><div class="running-type-name"><strong>${esc(category.label)}</strong><small>${esc(category.note)}</small></div><div class="running-type-track"><span style="width:${width}%"></span></div><span class="running-type-count">${stats.count} ${stats.count===1?'sesja':'sesji'}</span><strong class="running-type-distance">${num(stats.distance,2)} km</strong><span class="running-type-time">${time(stats.minutes)}</span></div>`;
+  }).join('');
+  $('#running-types').innerHTML=rows;
+  const weeks=new Map();
+  for(const activity of data.activities.filter(a=>a.status==='done'&&RUNNING_KINDS.has(a.kind))){
+    const date=parseDate(activity.date);date.setDate(date.getDate()-(date.getDay()+6)%7);const key=dateKey(date),week=weeks.get(key)||{date:key,distance:0,count:0};week.distance+=activity.distance_km;week.count++;weeks.set(key,week);
+  }
+  const values=[...weeks.values()].sort((a,b)=>a.date.localeCompare(b.date)),maximum=Math.max(...values.map(w=>w.distance),1);
+  $('#running-weekly-chart').innerHTML=values.length?values.map(w=>`<div class="weekly-row"><span>Od ${shortDay(w.date)}<small>${w.count} ${w.count===1?'bieg':'biegów'}</small></span><div class="weekly-track"><div class="weekly-fill" style="width:${w.distance/maximum*100}%"></div></div><span class="weekly-value">${num(w.distance,1)}<small>km</small></span></div>`).join(''):'<div class="empty-state">Po zapisaniu lub zaimportowaniu biegu zobaczysz kilometraż w kolejnych tygodniach.</div>';
+  const recovery=sumFor(['recovery_run','recovery_stretch']);
+  $('#running-recovery').innerHTML=recovery.count?`${recovery.count} aktywności regeneracyjne · ${time(recovery.minutes)}${recovery.distance?` · ${num(recovery.distance,2)} km biegu regeneracyjnego`:''}`:'Zapisuj osobno lekki bieg i rozciąganie regeneracyjne, aby śledzić ich regularność.';
+}
 function renderTable() {
   const filter=$('#activity-filter').value;
   const activities=data.activities.filter(a=>filter==='all'||(filter==='matches'?a.is_match:a.status===filter));
@@ -126,7 +162,7 @@ function renderCycles() {
 }
 function showView(view) {
   activeView=view;
-  for(const key of ['calendar','analysis','cycles']) $(`#${key}-view`).hidden=key!==view;
+  for(const key of ['calendar','analysis','running-analysis','cycles']) $(`#${key}-view`).hidden=key!==view;
   $$('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
 }
 function openActivity(activity=null, day=selected, slot=null, suggestion=null) {
@@ -156,6 +192,10 @@ function openImport(activityId='') {
   const form=$('#import-form');form.reset();form.elements.activity_id.value=activityId;
   form.querySelector('.form-error').textContent='';$('#upload-filename').textContent='Nie wybrano pliku';
   form.elements.date.disabled=!!activityId;
+  const target=activityId&&data.activities.find(a=>a.id===Number(activityId));
+  $('#import-dialog .muted').textContent=target?`Dodajesz TCX do: ${target.kind_label} · ${shortDay(target.date)}. Wczytane dane zastąpią planowany czas i dystans, a termin, kategoria, RPE oraz notatki pozostaną.`:'W Garmin Connect otwórz aktywność i wybierz „Eksportuj do TCX”. Wczytamy czas, dystans oraz próbki tętna.';
+  $('#import-dialog h2').textContent=target?(target.status==='planned'?'Uzupełnij zaplanowaną aktywność.':'Uzupełnij aktywność.'):'Przenieś trening do dziennika.';
+  form.querySelector('[type=submit]').textContent=activityId?'Importuj do tej aktywności':'Importuj aktywność';
   $('#import-date-hint').textContent=activityId?'TCX uzupełni wybraną aktywność. Jej data, rodzaj, RPE i notatki zostaną zachowane.':'Pusta data oznacza datę z TCX w strefie Europe/Warsaw. Aktywność zajmie pierwsze wolne miejsce w tym dniu.';
   $('#import-dialog').showModal();
 }

@@ -3,6 +3,8 @@ from datetime import timedelta
 
 from .models import KINDS, MATCH_KINDS
 
+RUNNING_KINDS = {'endurance', 'recovery_run', 'starts', 'short_sprints', 'fast_intervals', 'tempo_intervals', 'tempo_run', 'intervals', 'speed'}
+
 
 def zone_times(activity, limits):
     result = [0.0] * 5
@@ -32,13 +34,14 @@ def serialize(activity, limits):
 def summary(activities, limits):
     done = [a for a in activities if a.status == 'done']
     zones = [0.0] * 5
-    types, weeks = defaultdict(lambda: {'count': 0, 'minutes': 0}), defaultdict(lambda: {'load': 0, 'minutes': 0, 'count': 0, 'unrated': 0})
+    types, weeks = defaultdict(lambda: {'count': 0, 'minutes': 0, 'distance_km': 0}), defaultdict(lambda: {'load': 0, 'minutes': 0, 'count': 0, 'unrated': 0})
     weighted_hr, covered = 0, 0
     for activity in done:
         seconds = zone_times(activity, limits)
         zones = [x + y for x, y in zip(zones, seconds)]
         types[activity.kind]['count'] += 1
         types[activity.kind]['minutes'] += activity.duration_seconds / 60
+        types[activity.kind]['distance_km'] += activity.distance_km
         week = (activity.date - timedelta(days=activity.date.weekday())).isoformat()
         weeks[week]['minutes'] += activity.duration_seconds / 60
         weeks[week]['count'] += 1
@@ -49,11 +52,17 @@ def summary(activities, limits):
         for hr, duration in activity.hr_segments:
             weighted_hr += hr * duration
             covered += duration
+    match_distance = sum(a.distance_km for a in done if a.kind in MATCH_KINDS)
+    training_distance = sum(a.distance_km for a in done if a.kind not in MATCH_KINDS and a.kind in RUNNING_KINDS)
+    running_distance = match_distance + training_distance
     return {
         'completed': len(done), 'planned': sum(a.status == 'planned' for a in activities),
         'matches': sum(a.kind in MATCH_KINDS for a in done),
         'minutes': round(sum(a.duration_seconds for a in done) / 60, 1),
-        'distance_km': round(sum(a.distance_km for a in done), 2),
+        'distance_km': round(match_distance + training_distance, 2),
+        'match_distance_km': round(match_distance, 2),
+        'training_distance_km': round(training_distance, 2),
+        'running_distance_km': round(running_distance, 2),
         'load': round(sum(a.duration_seconds / 60 * a.rpe for a in done if a.rpe)),
         'unrated': sum(a.rpe is None for a in done),
         'avg_hr': round(weighted_hr / covered) if covered else None,

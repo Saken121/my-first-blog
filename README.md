@@ -34,10 +34,10 @@ W przygotowanym środowisku chmurowym interpreter znajduje się w `/workspace/.o
 ## Codzienna praca
 
 1. Wybierz miesiąc i kliknij jedno z **dwóch miejsc aktywności** w danym dniu.
-2. Wybierz rodzaj: bieg spokojny, interwały, szybkość, siła, mobilność, regeneracja, rower, test lub inna aktywność. Mecze mają osobne kategorie: **III liga, liga okręgowa i sędzia asystent**.
+2. Wybierz rodzaj, m.in. bieg spokojny lub regeneracyjny, rozciąganie regeneracyjne, starty, krótkie sprinty, szybkie lub tempowe interwały, siłę i mobilność. Mecze mają osobne kategorie: **III liga, liga okręgowa i sędzia asystent**.
 3. Wpisz czas, dystans, cel treningu i notatki. Rozróżniaj aktywności zaplanowane i wykonane. Po treningu uzupełnij **RPE 1–10**.
 4. W widoku **Mikrocykle** wybierz dzień. Zobaczysz propozycje tygodnia wokół terminów meczów. `MD` to dzień meczowy, `MD−1` to przeddzień, `MD+1` to dzień po meczu. Kliknięcie propozycji otwiera edytowalny formularz planu. Uwzględniane są również mecze w sąsiednich miesiącach. Przy bliskich terminach pierwszeństwo ma regeneracja po ostatnim meczu.
-5. W widoku **Analiza treningów** sprawdzaj czas, dystans, czas w strefach, rodzaje treningów, tętno oraz tygodniowe obciążenie. **Eksport CSV** zapisuje wybrany miesiąc w pliku czytelnym dla Excela, z separatorem `;` i kodowaniem UTF-8.
+5. W widoku **Analiza treningów** sprawdzaj czas w strefach, tętno i obciążenie. **Więcej analiz** rozbija bieganie na typy sesji, pokazuje ich liczbę, czas i dystans tygodniowy. Podsumowanie rozdziela kilometry biegowe z meczów i treningów oraz podaje ich sumę. **Eksport CSV** zapisuje wybrany miesiąc w pliku czytelnym dla Excela, z separatorem `;` i kodowaniem UTF-8.
 
 Propozycje mikrocykli są punktem wyjścia do własnego planu. Nie przesuwają ani nie zmieniają wcześniej zapisanych aktywności.
 
@@ -47,7 +47,7 @@ W Garmin Connect otwórz trening i wybierz eksport do TCX. W aplikacji wybierz *
 
 - Importuje czas, dystans, tętno średnie/maksymalne i moc średnią/maksymalną, jeśli plik zawiera te dane.
 - Data pochodzi z TCX i jest przeliczana na `Europe/Warsaw`. Możesz wskazać inną datę przy imporcie.
-- Nowy import zajmuje pierwsze wolne miejsce. Gdy oba miejsca są zajęte, otwórz istniejącą aktywność i wybierz **Dołącz TCX**. Zachowa datę, kategorię meczu, RPE i notatki.
+- Nowy import zajmuje pierwsze wolne miejsce. Aby uzupełnić zaplanowany trening, otwórz go z kalendarza i wybierz **Importuj TCX do tej aktywności**. Czas, dystans, tętno i dostępne dane mocy wypełnią ten wpis; jego data, kategoria, RPE i notatki pozostaną zachowane. Dotyczy to także meczu, więc jego dystans będzie wykazany w statystyce meczowej.
 - Czas w strefach liczony jest z odstępów między kolejnymi próbkami w obrębie każdego odcinka `Track`. Poprzednia próbka opisuje następujący po niej odcinek. Przerwy ponad 120 sekund i odcinki bez tętna pozostają bez danych HR. Czas próbek jest ograniczony do łącznego czasu z okrążeń.
 - Brakujące próbki nie są zastępowane średnim tętnem. Ręczne aktywności nie mają automatycznie wyliczanego czasu w strefach.
 - Zmiana stref przelicza zachowane próbki. Czas, dystans i HR importu są tylko do odczytu; poprawione dane można wczytać ponownie.
