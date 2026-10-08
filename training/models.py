@@ -56,6 +56,8 @@ class Activity(models.Model):
     imported_filename = models.CharField(max_length=200, blank=True)
     avg_power = models.PositiveIntegerField(null=True, blank=True)
     max_power = models.PositiveIntegerField(null=True, blank=True)
+    splits = models.JSONField(default=list)
+    peak_metrics = models.JSONField(default=dict)
 
     class Meta:
         ordering = ['date', 'slot']

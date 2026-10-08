@@ -16,3 +16,19 @@
 .running-type-distance{text-align:right;font-size:10px;font-weight:550}
 .running-recovery{font-size:12px;line-height:1.8;color:#62736a}
 @media(max-width:730px){.nav-item{font-size:9px;gap:5px;padding:8px 4px;line-height:1.2;white-space:normal}.nav-item svg{width:14px;height:14px}.distance-breakdown{gap:3px}.distance-breakdown strong{font-size:16px}.running-overview{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.running-type-row{grid-template-columns:minmax(0,1fr) auto auto;gap:7px 10px;padding:11px 0}.running-type-name{grid-column:1}.running-type-track{grid-column:1/-1;grid-row:2}.running-type-count{grid-column:2;grid-row:1;white-space:nowrap}.running-type-distance{grid-column:3;grid-row:1;white-space:nowrap}.running-type-time{display:none}}
+/* Recent peak-effort trends and TCX split analysis. */
+.peak-trends{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.peak-card{min-width:0;background:#f8f9f5;border:1px solid var(--line);border-radius:8px;padding:14px}
+.peak-card-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.peak-card-heading strong{font-size:15px;font-weight:550;white-space:nowrap}
+.peak-sparkline{display:block;width:100%;height:76px;margin:7px 0;color:#59816d;overflow:visible}
+.peak-sparkline polyline{fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.peak-sparkline circle{fill:#fff;stroke:currentColor;stroke-width:2}
+.peak-card-foot{display:flex;flex-direction:column;gap:5px}
+.peak-card-foot small{font-size:9px;color:var(--muted)}
+.trend-state{font-size:10px;font-weight:550}
+.trend-state.up{color:#427750}.trend-state.down{color:#b45e53}.trend-state.neutral{color:#77847c}
+.peak-hr-note{grid-column:1/-1;margin:0;font-size:10px;line-height:1.7;color:var(--muted)}
+#peak-kind-filter,#split-activity{max-width:240px}
+@media(max-width:1050px){.peak-trends{grid-template-columns:1fr}.peak-hr-note{grid-column:1}}
+@media(max-width:730px){#peak-kind-filter,#split-activity{max-width:100%;width:100%}.peak-card{padding:12px}.peak-sparkline{height:68px}}

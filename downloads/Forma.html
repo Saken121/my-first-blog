@@ -22,6 +22,22 @@
 .running-type-distance{text-align:right;font-size:10px;font-weight:550}
 .running-recovery{font-size:12px;line-height:1.8;color:#62736a}
 @media(max-width:730px){.nav-item{font-size:9px;gap:5px;padding:8px 4px;line-height:1.2;white-space:normal}.nav-item svg{width:14px;height:14px}.distance-breakdown{gap:3px}.distance-breakdown strong{font-size:16px}.running-overview{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.running-type-row{grid-template-columns:minmax(0,1fr) auto auto;gap:7px 10px;padding:11px 0}.running-type-name{grid-column:1}.running-type-track{grid-column:1/-1;grid-row:2}.running-type-count{grid-column:2;grid-row:1;white-space:nowrap}.running-type-distance{grid-column:3;grid-row:1;white-space:nowrap}.running-type-time{display:none}}
+/* Recent peak-effort trends and TCX split analysis. */
+.peak-trends{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.peak-card{min-width:0;background:#f8f9f5;border:1px solid var(--line);border-radius:8px;padding:14px}
+.peak-card-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.peak-card-heading strong{font-size:15px;font-weight:550;white-space:nowrap}
+.peak-sparkline{display:block;width:100%;height:76px;margin:7px 0;color:#59816d;overflow:visible}
+.peak-sparkline polyline{fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.peak-sparkline circle{fill:#fff;stroke:currentColor;stroke-width:2}
+.peak-card-foot{display:flex;flex-direction:column;gap:5px}
+.peak-card-foot small{font-size:9px;color:var(--muted)}
+.trend-state{font-size:10px;font-weight:550}
+.trend-state.up{color:#427750}.trend-state.down{color:#b45e53}.trend-state.neutral{color:#77847c}
+.peak-hr-note{grid-column:1/-1;margin:0;font-size:10px;line-height:1.7;color:var(--muted)}
+#peak-kind-filter,#split-activity{max-width:240px}
+@media(max-width:1050px){.peak-trends{grid-template-columns:1fr}.peak-hr-note{grid-column:1}}
+@media(max-width:730px){#peak-kind-filter,#split-activity{max-width:100%;width:100%}.peak-card{padding:12px}.peak-sparkline{height:68px}}
 
 .toolbar-actions{flex-wrap:wrap}.offline-note{display:flex;gap:10px;align-items:center;justify-content:space-between;background:#eaf0e7;border:1px solid #dce5d6;border-radius:8px;padding:12px 16px;margin-bottom:22px;font-size:11px;color:#68815e}.backup-buttons{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.backup-buttons>label{cursor:pointer}.backup-buttons input{max-width:100%}@media(max-width:730px){.offline-note{font-size:10px;line-height:1.7;align-items:flex-start}.toolbar-actions{gap:12px}}
 </style>
@@ -70,7 +86,7 @@
   <div class="bottom-grid"><article class="card"><div class="card-heading"><div><span class="section-eyebrow">INTENSYWNOŚĆ</span><h3>Gdzie pracowało Twoje serce?</h3></div><button class="text-button" data-view="analysis">Pełna analiza ↗</button></div><div id="zones-compact"></div></article><article class="card"><span class="section-eyebrow">RÓWNOWAGA TRENINGU</span><h3>Każdy bodziec ma znaczenie.</h3><div id="types-compact"></div></article></div>
  </section>
  <section id="analysis-view" class="view" hidden><div class="analysis-grid"><article class="card"><div class="card-heading"><div><span class="section-eyebrow">DANE Z POMIARU</span><h3>Czas w strefach tętna</h3></div><button class="text-button" id="analysis-settings">Edytuj strefy ↗</button></div><div id="zones-full"></div><p class="footnote">Czas liczony między próbkami TCX, osobno dla każdego odcinka. Przerwy powyżej 2 minut i brakujące próbki trafiają do „bez danych HR”.</p><div id="hr-overview" class="hr-overview"></div></article><article class="card"><span class="section-eyebrow">TYGODNIOWY RYTM</span><h3>Obciążenie i objętość</h3><div id="weekly-chart"></div><p class="footnote">sRPE = czas w minutach × RPE (1–10). Podsumowanie obejmuje wykonane aktywności w wybranym miesiącu; tygodnie na jego granicach są częściowe.</p></article><article class="card wide"><span class="section-eyebrow">RODZAJE AKTYWNOŚCI</span><h3>Jak rozkładał się Twój trening?</h3><div id="types-full"></div></article><article class="card wide"><div class="card-heading"><div><span class="section-eyebrow">DZIENNIK</span><h3>Szczegóły aktywności</h3></div><select id="activity-filter" aria-label="Filtr aktywności"><option value="all">Wszystkie aktywności</option><option value="done">Wykonane</option><option value="planned">Zaplanowane</option><option value="matches">Mecze</option></select></div><div class="table-scroll"><table><thead><tr><th>Data</th><th>Aktywność</th><th>Status</th><th>Czas</th><th>Dystans</th><th>Śr. / max HR</th><th>Moc śr.</th><th>RPE</th><th>sRPE</th></tr></thead><tbody id="activity-table"></tbody></table></div></article></div></section>
- <section id="running-analysis-view" class="view" hidden><div class="analysis-grid"><article class="card wide"><span class="section-eyebrow">BIEGANIE · BODŹCE TRENINGOWE</span><h3>Jakie formy biegu ćwiczysz?</h3><p class="muted">Analiza wykonanych aktywności w wybranym miesiącu. Kilometraż treningowy nie obejmuje meczów. Przy imporcie TCX możesz przypisać dane do planowanej kategorii.</p><div id="running-overview" class="hr-overview running-overview"></div><div id="running-types" class="running-types"></div></article><article class="card"><span class="section-eyebrow">OBJĘTOŚĆ BIEGOWA</span><h3>Kilometry na tydzień</h3><div id="running-weekly-chart"></div><p class="footnote">Biegi rozliczane od poniedziałku do niedzieli. Rozciąganie regeneracyjne nie wlicza się do dystansu.</p></article><article class="card"><span class="section-eyebrow">ODBUDOWA</span><h3>Regeneracja</h3><p id="running-recovery" class="running-recovery"></p><p class="footnote">Bieg regeneracyjny i rozciąganie są osobnymi rodzajami aktywności.</p></article></div></section>
+ <section id="running-analysis-view" class="view" hidden><div class="analysis-grid"><article class="card wide"><span class="section-eyebrow">BIEGANIE · BODŹCE TRENINGOWE</span><h3>Jakie formy biegu ćwiczysz?</h3><p class="muted">Analiza wykonanych aktywności w wybranym miesiącu. Kilometraż treningowy nie obejmuje meczów. Przy imporcie TCX możesz przypisać dane do planowanej kategorii.</p><div id="running-overview" class="hr-overview running-overview"></div><div id="running-types" class="running-types"></div></article><article class="card"><span class="section-eyebrow">OBJĘTOŚĆ BIEGOWA · OSTATNIE 12 TYGODNI</span><h3>Kilometry na tydzień</h3><div id="running-weekly-chart"></div><p class="footnote">Biegi rozliczane od poniedziałku do niedzieli. Rozciąganie regeneracyjne nie wlicza się do dystansu.</p></article><article class="card wide"><div class="card-heading"><div><span class="section-eyebrow">MAKSYMALNE OSIĄGI · OSTATNIE 12 TYGODNI</span><h3>Czy wyniki rosną czy spadają?</h3></div><select id="peak-kind-filter" aria-label="Filtr rodzaju biegu"></select></div><div id="peak-trends" class="peak-trends"></div><p class="footnote">Kierunek porównuje średnią z maksymalnie 4 wcześniejszych i 4 ostatnich sesji; zmiany poniżej 2% oznaczamy jako podobny poziom. Porównuj podobne treningi. Prędkość zależy od GPS i nawierzchni. Tętno maksymalne pokazujemy jako reakcję organizmu, nie samodzielny wskaźnik formy.</p></article><article class="card wide"><div class="card-heading"><div><span class="section-eyebrow">GARMIN · TCX</span><h3>Analiza odcinków</h3></div><select id="split-activity" aria-label="Wybierz aktywność do analizy odcinków"></select></div><div class="table-scroll"><table><thead><tr><th>Odcinek</th><th>Dystans</th><th>Czas</th><th>Tempo</th><th>Śr. / max HR</th><th>Śr. / max moc</th></tr></thead><tbody id="split-table"></tbody></table></div><p id="split-note" class="footnote"></p></article><article class="card"><span class="section-eyebrow">ODBUDOWA</span><h3>Regeneracja</h3><p id="running-recovery" class="running-recovery"></p><p class="footnote">Bieg regeneracyjny i rozciąganie są osobnymi rodzajami aktywności.</p></article></div></section>
  <section id="cycles-view" class="view" hidden><article class="card"><div class="card-heading"><div><span class="section-eyebrow">MIKROCYKL MECZOWY</span><h3>Zbuduj tydzień wokół meczu.</h3></div><input id="cycle-date" type="date" aria-label="Wybierz dzień mikrocyklu"></div><p class="muted">MD oznacza dzień meczu. Propozycje uwzględniają mecze przed i po wybranym dniu, także na granicach miesięcy. Dopasuj je do swojej regeneracji i planu.</p><div id="cycle-week" class="cycle-week"></div></article><article class="card cycle-guide"><h3>Rytm, który możesz dostosować</h3><p><b>Po meczu:</b> regeneracja i stopniowy powrót. <b>3 dni przed:</b> miejsce na bodziec jakościowy. <b>2 dni przed:</b> mniejsza objętość. <b>W przeddzień:</b> krótka aktywacja. Gdy mecze są blisko siebie, pierwszeństwo ma odbudowa po ostatnim.</p></article></section>
  <footer class="main-footer"><span>forma. <span>Przestrzeń na dobrą formę.</span></span><span>Dane zapisują się w tej przeglądarce.</span></footer>
 </main>
@@ -150,6 +166,9 @@
       if(!['manual','tcx'].includes(item.source)) fail('Nieprawidłowe źródło aktywności w kopii.');
       a.source=item.source;a.imported_filename=String(item.imported_filename??'').slice(0,200);
       a.avg_power=number(item.avg_power,'średnia moc',0,5000,true,true);a.max_power=number(item.max_power,'maksymalna moc',0,5000,true,true);
+      a.splits=Array.isArray(item.splits)?item.splits.slice(0,1000).map(s=>({distance_km:number(s.distance_km,'dystans odcinka',0,100,true),duration_seconds:number(s.duration_seconds,'czas odcinka',0,86400),avg_hr:number(s.avg_hr,'średnie tętno odcinka',20,250,true,true),max_hr:number(s.max_hr,'maksymalne tętno odcinka',20,250,true,true),avg_power:number(s.avg_power,'średnia moc odcinka',0,5000,true,true),max_power:number(s.max_power,'maksymalna moc odcinka',0,5000,true,true)})):[];
+      const peaks=item.peak_metrics&&typeof item.peak_metrics==='object'?item.peak_metrics:{};
+      a.peak_metrics={speed_5s_kmh:number(peaks.speed_5s_kmh,'prędkość 5 s',0,80,false,true),speed_30s_kmh:number(peaks.speed_30s_kmh,'prędkość 30 s',0,80,false,true),best_1km_pace_seconds:number(peaks.best_1km_pace_seconds,'tempo 1 km',0,3600,false,true),power_5s_w:number(peaks.power_5s_w,'moc 5 s',0,5000,true,true),max_hr_bpm:number(peaks.max_hr_bpm,'maksymalne tętno',20,250,true,true),split_mode:['laps','kilometers'].includes(peaks.split_mode)?peaks.split_mode:''};
       if(!Array.isArray(item.hr_segments)||item.hr_segments.length>1000) fail('Nieprawidłowe próbki HR w kopii.');
       a.hr_segments=item.hr_segments.map(s=>{
         if(!Array.isArray(s)||s.length!==2) fail('Nieprawidłowa próbka HR.');
@@ -208,7 +227,8 @@
     const matches=db.activities.filter(isMatch),cycles={};
     for(let key=first;key.startsWith(month);key=shift(key,1)) cycles[key]=microcycle(key,matches);
     const next=matches.filter(a=>a.date>=warsawDate()).sort((a,b)=>a.date.localeCompare(b.date)||a.slot-b.slot)[0];
-    return {activities:activities.map(a=>serialize(a,db.profile)),summary:summary(activities,db.profile),profile:clone(db.profile),kinds:KINDS,next_match:next?serialize(next,db.profile):null,microcycles:cycles};
+    const current=warsawDate(),historyStart=shift(current,-83),history=db.activities.filter(a=>a.status==='done'&&a.date>=historyStart&&a.date<=current).sort((a,b)=>a.date.localeCompare(b.date)||a.slot-b.slot);
+    return {activities:activities.map(a=>serialize(a,db.profile)),history:history.map(a=>serialize(a,db.profile)),summary:summary(activities,db.profile),profile:clone(db.profile),kinds:KINDS,next_match:next?serialize(next,db.profile):null,microcycles:cycles};
   }
   const children=(node,name)=>[...node.children].filter(n=>n.localName===name);
   const descendants=(node,name)=>[...node.getElementsByTagName('*')].filter(n=>n.localName===name);
@@ -221,15 +241,54 @@
     validDate(value.trim().slice(0,10));const n=Date.parse(value.trim());if(!Number.isFinite(n))fail('Nieprawidłowy czas w TCX.');return n;
   }
   function roundEven(n){const floor=Math.floor(n);return n-floor===.5?floor+(floor%2):Math.round(n);}
+  function splitRow(distance,seconds,points) {
+    const hr=points.map(p=>p.hr).filter(n=>n!==null),power=points.map(p=>p.power).filter(n=>n!==null);
+    return {distance_km:Math.round(distance/1000*1000)/1000,duration_seconds:Math.round(seconds*100)/100,avg_hr:hr.length?roundEven(hr.reduce((a,b)=>a+b,0)/hr.length):null,max_hr:hr.length?Math.max(...hr):null,avg_power:power.length?roundEven(power.reduce((a,b)=>a+b,0)/power.length):null,max_power:power.length?Math.max(...power):null};
+  }
+  function automaticSplits(points) {
+    points=points.filter(p=>p.t!==null&&p.distance!==null).sort((a,b)=>a.t-b.t);if(points.length<2)return [];
+    let startTime=points[0].t,startDistance=points[0].distance,boundary=startDistance+1000,chunk=[points[0]],previous=points[0];const result=[];
+    for(const current of points.slice(1)) {
+      if(current.t<=previous.t){previous=current;continue;}
+      if(current.t-previous.t>120||current.distance<previous.distance){startTime=current.t;startDistance=current.distance;boundary=startDistance+1000;chunk=[current];previous=current;continue;}
+      while(current.distance>=boundary&&current.distance>previous.distance) {
+        const fraction=(boundary-previous.distance)/(current.distance-previous.distance),splitTime=previous.t+fraction*(current.t-previous.t),interpolated={t:splitTime,distance:boundary,hr:null,power:null};
+        const samples=chunk.filter(p=>p.t>=startTime&&p.t<splitTime);samples.push(interpolated);
+        const elapsed=splitTime-startTime,distance=boundary-startDistance;if(elapsed>0&&distance>0)result.push(splitRow(distance,elapsed,samples));
+        startTime=splitTime;startDistance=boundary;chunk=[interpolated];boundary+=1000;
+      }
+      chunk.push(current);previous=current;
+    }
+    const last=points.at(-1),distance=last.distance-startDistance;
+    if(distance>20&&last.t>startTime)result.push(splitRow(distance,last.t-startTime,chunk.filter(p=>p.t>=startTime&&p.t<=last.t)));
+    return result;
+  }
+  function peakSpeed(points,window) {
+    let best=null;
+    for(let end=1;end<points.length;end++)for(let start=end-1;start>=0;start--){
+      const elapsed=points[end].t-points[start].t;if(elapsed>window*1.2)break;if(elapsed<window*.8||elapsed<=0)continue;
+      const distance=points[end].distance-points[start].distance,speed=distance/elapsed*3.6;if(distance>=window*2&&speed<=45&&(best===null||speed>best))best=speed;
+    }
+    return best===null?null:Math.round(best*100)/100;
+  }
+  function peakPower(points,window=5) {
+    let best=null;
+    for(let end=1;end<points.length;end++)for(let start=end-1;start>=0;start--){
+      const elapsed=points[end].t-points[start].t;if(elapsed>window*1.2)break;if(elapsed<window*.8||elapsed<=0)continue;
+      const values=points.slice(start,end+1).map(p=>p.power).filter(n=>n!==null);if(values.length<2)continue;const value=values.reduce((a,b)=>a+b,0)/values.length;if(best===null||value>best)best=value;
+    }
+    return best===null?null:roundEven(best);
+  }
   function parseTCX(text) {
     if(!text||/<!DOCTYPE|<!ENTITY/i.test(text))fail('Nieprawidłowy lub niedozwolony plik XML/TCX.');
     const xml=new DOMParser().parseFromString(text,'application/xml');
     if(descendants(xml,'parsererror').length||xml.documentElement.localName!=='TrainingCenterDatabase')fail('To nie jest poprawny plik Garmin TCX.');
     const activities=descendants(xml,'Activity');if(activities.length!==1)fail('Importuj plik TCX zawierający jedną aktywność.');
-    const a=activities[0],starts=[],timestamps=[],hearts=[],powers=[],durations=[],distances=[],samples=new Map();let fallback=0,powerWeighted=0,powerSeconds=0;
+    const a=activities[0],starts=[],timestamps=[],hearts=[],powers=[],durations=[],distances=[],samples=new Map(),allPoints=[],lapRows=[];let fallback=0,powerWeighted=0,powerSeconds=0;
     for(const lap of children(a,'Lap')) {
       if(lap.getAttribute('StartTime'))starts.push(xmlTime(lap.getAttribute('StartTime')));
       for(const [name,target] of [['TotalTimeSeconds',durations],['DistanceMeters',distances]])for(const node of children(lap,name)){const n=xmlNumber(node,name);if(n!==null)target.push(n);}
+      const lapPoints=[];
       for(const track of children(lap,'Track')) {
         let previous=null;
         for(const point of children(track,'Trackpoint')) {
@@ -237,7 +296,7 @@
           const hrNode=children(point,'HeartRateBpm')[0];let hr=hrNode?xmlNumber(hrNode,'Value'):null;
           hr=hr!==null&&hr>=20&&hr<=250?roundEven(hr):null;
           const distance=xmlNumber(point,'DistanceMeters');let power=xmlNumber(point,'Watts');if(power>5000)power=null;
-          if(timestamp!==null)timestamps.push(timestamp);if(hr)hearts.push(hr);if(power!==null)powers.push(power);
+          if(timestamp!==null)timestamps.push(timestamp);if(hr)hearts.push(hr);if(power!==null)powers.push(power);if(timestamp!==null&&distance!==null)lapPoints.push({t:timestamp/1000,distance,hr,power});
           if(previous) {
             if(timestamp!==null&&previous.timestamp!==null){const seconds=(timestamp-previous.timestamp)/1000;if(seconds>0&&seconds<=120){if(previous.hr)samples.set(previous.hr,(samples.get(previous.hr)||0)+seconds);if(previous.power!==null){powerWeighted+=previous.power*seconds;powerSeconds+=seconds;}}}
             if(distance!==null&&previous.distance!==null)fallback+=Math.max(0,distance-previous.distance);
@@ -245,6 +304,9 @@
           previous={timestamp,hr,distance,power};
         }
       }
+      lapPoints.sort((x,y)=>x.t-y.t);allPoints.push(...lapPoints);
+      const lapDuration=xmlNumber(lap,'TotalTimeSeconds'),lapDistance=xmlNumber(lap,'DistanceMeters');
+      if(lapDuration&&lapDistance>0){const row=splitRow(lapDistance,lapDuration,lapPoints),avg=children(lap,'AverageHeartRateBpm')[0],max=children(lap,'MaximumHeartRateBpm')[0],avgValue=avg?xmlNumber(avg,'Value'):null,maxValue=max?xmlNumber(max,'Value'):null;if(avgValue!==null&&avgValue>=20&&avgValue<=250)row.avg_hr=roundEven(avgValue);if(maxValue!==null&&maxValue>=20&&maxValue<=250)row.max_hr=roundEven(maxValue);lapRows.push(row);}
     }
     if(!starts.length&&!timestamps.length){const id=children(a,'Id')[0];if(id)starts.push(xmlTime(id.textContent));}
     const times=[...starts,...timestamps];if(!times.length)fail('Plik nie zawiera daty aktywności.');
@@ -257,7 +319,9 @@
     let max_hr=hearts.length?hearts.reduce((max,v)=>Math.max(max,v),0):null;
     if(max_hr===null)for(const node of descendants(a,'MaximumHeartRateBpm')){const n=xmlNumber(node,'Value');if(n!==null&&n>=20&&n<=250)max_hr=Math.max(max_hr||0,roundEven(n));}
     const meters=distances.length?distances.reduce((x,y)=>x+y,0):fallback;if(!Number.isFinite(meters)||meters>1000000)fail('Nieprawidłowy dystans w TCX.');
-    return {date:warsawDate(new Date(earliest)),kind:a.getAttribute('Sport')==='Biking'?'cycling':'endurance',duration_seconds:Math.round(duration*100)/100,distance_km:Math.round(meters)/1000,avg_hr,max_hr,avg_power:powerSeconds?roundEven(powerWeighted/powerSeconds):null,max_power:powers.length?roundEven(powers.reduce((max,v)=>Math.max(max,v),0)):null,hr_segments:[...samples].sort((a,b)=>a[0]-b[0]).map(([hr,s])=>[hr,Math.round(s*1000)/1000])};
+    const kilometerSplits=automaticSplits(allPoints),splits=lapRows.length>1?lapRows:kilometerSplits,paceSplits=kilometerSplits.length?kilometerSplits:splits,oneKmPaces=paceSplits.filter(s=>s.distance_km>=.9&&s.distance_km<=1.1).map(s=>s.duration_seconds/s.distance_km),points=allPoints.sort((x,y)=>x.t-y.t);
+    const peak_metrics={speed_5s_kmh:peakSpeed(points,5),speed_30s_kmh:peakSpeed(points,30),best_1km_pace_seconds:oneKmPaces.length?Math.round(Math.min(...oneKmPaces)*100)/100:null,power_5s_w:peakPower(points),max_hr_bpm:max_hr,split_mode:lapRows.length>1?'laps':splits.length?'kilometers':''};
+    return {date:warsawDate(new Date(earliest)),kind:a.getAttribute('Sport')==='Biking'?'cycling':'endurance',duration_seconds:Math.round(duration*100)/100,distance_km:Math.round(meters)/1000,avg_hr,max_hr,avg_power:powerSeconds?roundEven(powerWeighted/powerSeconds):null,max_power:powers.length?roundEven(powers.reduce((max,v)=>Math.max(max,v),0)):null,hr_segments:[...samples].sort((a,b)=>a[0]-b[0]).map(([hr,s])=>[hr,Math.round(s*1000)/1000]),splits,peak_metrics};
   }
   function freeSlot(db,date,id=null,slot=null) {
     const occupied=db.activities.filter(a=>a.date===date&&a.id!==id).map(a=>a.slot);
@@ -278,7 +342,7 @@
     if(parsed.pathname==='/api/profile/'&&method==='POST'){db.profile=validateProfile(JSON.parse(options.body));persist(db);return {saved:true};}
     const detail=parsed.pathname.match(/^\/api\/activities\/(\d+)\/$/);
     if(detail){const id=Number(detail[1]),index=db.activities.findIndex(a=>a.id===id);if(index<0)fail('Nie znaleziono aktywności.');if(method==='DELETE'){db.activities.splice(index,1);persist(db);return {deleted:true};}if(method==='POST'){const a=validateActivity(JSON.parse(options.body),db.activities[index]);freeSlot(db,a.date,id,a.slot);db.activities[index]=a;persist(db);return serialize(a,db.profile);}}
-    if(parsed.pathname==='/api/activities/'&&method==='POST'){const a=validateActivity(JSON.parse(options.body));freeSlot(db,a.date,null,a.slot);Object.assign(a,{id:db.nextId++,source:'manual',hr_segments:[],imported_filename:'',avg_power:null,max_power:null});db.activities.push(a);persist(db);return serialize(a,db.profile);}
+    if(parsed.pathname==='/api/activities/'&&method==='POST'){const a=validateActivity(JSON.parse(options.body));freeSlot(db,a.date,null,a.slot);Object.assign(a,{id:db.nextId++,source:'manual',hr_segments:[],imported_filename:'',avg_power:null,max_power:null,splits:[],peak_metrics:{}});db.activities.push(a);persist(db);return serialize(a,db.profile);}
     fail('Nieobsługiwana operacja.');
   }
   function download(contents,filename,type) {
@@ -328,6 +392,7 @@ const colors = ['#a7c9c7','#85b297','#d4bd67','#dc9264','#bc6570'];
 const zoneNames = ['Regeneracja','Wytrzymałość tlenowa','Tempo','Próg','Powyżej progu'];
 const num = (n, digits=0) => Number(n || 0).toLocaleString('pl-PL',{maximumFractionDigits:digits});
 const time = mins => mins >= 60 ? `${Math.floor(mins/60)} h ${Math.round(mins%60)} min` : `${num(mins,1)} min`;
+const pace = seconds => {if(!(seconds>0))return '—';const total=Math.round(seconds);return `${Math.floor(total/60)}:${String(total%60).padStart(2,'0')} min/km`;};
 const shortDay = key => parseDate(key).toLocaleDateString('pl-PL',{day:'numeric',month:'short'});
 const activitiesOn = key => data.activities.filter(a=>a.date===key);
 const labelOf = a => a.title || a.kind_label;
@@ -452,14 +517,56 @@ function renderRunningAnalysis() {
     return `<div class="running-type-row"><div class="running-type-name"><strong>${esc(category.label)}</strong><small>${esc(category.note)}</small></div><div class="running-type-track"><span style="width:${width}%"></span></div><span class="running-type-count">${stats.count} ${stats.count===1?'sesja':'sesji'}</span><strong class="running-type-distance">${num(stats.distance,2)} km</strong><span class="running-type-time">${time(stats.minutes)}</span></div>`;
   }).join('');
   $('#running-types').innerHTML=rows;
+  const history=data.history||[];
   const weeks=new Map();
-  for(const activity of data.activities.filter(a=>a.status==='done'&&RUNNING_KINDS.has(a.kind))){
+  for(const activity of history.filter(a=>RUNNING_KINDS.has(a.kind))){
     const date=parseDate(activity.date);date.setDate(date.getDate()-(date.getDay()+6)%7);const key=dateKey(date),week=weeks.get(key)||{date:key,distance:0,count:0};week.distance+=activity.distance_km;week.count++;weeks.set(key,week);
   }
   const values=[...weeks.values()].sort((a,b)=>a.date.localeCompare(b.date)),maximum=Math.max(...values.map(w=>w.distance),1);
   $('#running-weekly-chart').innerHTML=values.length?values.map(w=>`<div class="weekly-row"><span>Od ${shortDay(w.date)}<small>${w.count} ${w.count===1?'bieg':'biegów'}</small></span><div class="weekly-track"><div class="weekly-fill" style="width:${w.distance/maximum*100}%"></div></div><span class="weekly-value">${num(w.distance,1)}<small>km</small></span></div>`).join(''):'<div class="empty-state">Po zapisaniu lub zaimportowaniu biegu zobaczysz kilometraż w kolejnych tygodniach.</div>';
   const recovery=sumFor(['recovery_run','recovery_stretch']);
   $('#running-recovery').innerHTML=recovery.count?`${recovery.count} aktywności regeneracyjne · ${time(recovery.minutes)}${recovery.distance?` · ${num(recovery.distance,2)} km biegu regeneracyjnego`:''}`:'Zapisuj osobno lekki bieg i rozciąganie regeneracyjne, aby śledzić ich regularność.';
+  renderPeakTrends(history.filter(a=>RUNNING_KINDS.has(a.kind)));
+  renderSplits(history.filter(a=>RUNNING_KINDS.has(a.kind)));
+}
+function renderPeakTrends(activities) {
+  const filter=$('#peak-kind-filter');
+  const old=filter.value;
+  filter.innerHTML='<option value="all">Wszystkie rodzaje biegu</option>'+Object.entries(data.kinds).filter(([kind])=>RUNNING_KINDS.has(kind)).map(([kind,label])=>`<option value="${kind}">${esc(label)}</option>`).join('');
+  const preferred=old||activities.at(-1)?.kind||'all';
+  if([...filter.options].some(option=>option.value===preferred))filter.value=preferred;
+  const selected=filter.value,records=activities.filter(a=>selected==='all'||a.kind===selected).sort((a,b)=>a.date.localeCompare(b.date));
+  const definitions=[
+    {key:'speed_5s_kmh',label:'Prędkość maks. (~5 s)',unit:'km/h',higher:true,format:v=>`${num(v,1)} km/h`},
+    {key:'speed_30s_kmh',label:'Prędkość maks. (~30 s)',unit:'km/h',higher:true,format:v=>`${num(v,1)} km/h`},
+    {key:'best_1km_pace_seconds',label:'Najszybszy odcinek 1 km',unit:'min/km',higher:false,format:pace},
+    {key:'power_5s_w',label:'Moc maks. średnia (~5 s)',unit:'W',higher:true,format:v=>`${num(v)} W`}
+  ];
+  $('#peak-trends').innerHTML=definitions.map(definition=>{
+    const series=records.map(a=>({date:a.date,kind:a.kind,label:a.kind_label,value:a.peak_metrics?.[definition.key]})).filter(point=>Number.isFinite(point.value)).slice(-16);
+    if(!series.length)return `<article class="peak-card"><span class="section-eyebrow">${esc(definition.label)}</span><p class="empty-state">Dane pojawią się po imporcie TCX z pomiarami GPS lub mocy.</p></article>`;
+    const numbers=series.map(point=>point.value),min=Math.min(...numbers),max=Math.max(...numbers),range=max-min||1;
+    const coords=series.map((point,i)=>`${series.length===1?120:10+i*220/(series.length-1)},${58-(point.value-min)/range*46}`).join(' ');
+    const sampleCount=Math.min(4,Math.floor(series.length/2)),baseline=sampleCount?numbers.slice(0,sampleCount).reduce((x,y)=>x+y,0)/sampleCount:null,recent=sampleCount?numbers.slice(-sampleCount).reduce((x,y)=>x+y,0)/sampleCount:null;
+    const change=baseline?((recent-baseline)/baseline)*100:0,improving=definition.higher?change>2:change< -2,declining=definition.higher?change< -2:change>2;
+    const state=sampleCount<2?'Za mało sesji na trend':improving?'Średnia z ostatnich sesji rośnie':declining?'Średnia z ostatnich sesji spada':'Ostatnie sesje na podobnym poziomie';
+    const stateClass=sampleCount<2?'neutral':improving?'up':declining?'down':'neutral';
+    const deltaText=sampleCount>=2?` · ${change>0?'+':''}${num(change,1)}% (średnia ${sampleCount} wcześniejszych vs ostatnich sesji)`:'';
+    return `<article class="peak-card"><div class="peak-card-heading"><span class="section-eyebrow">${esc(definition.label)}</span><strong>${definition.format(numbers.at(-1))}</strong></div><svg class="peak-sparkline" viewBox="0 0 240 70" role="img" aria-label="${esc(definition.label)} na ostatnich ${series.length} treningach"><polyline points="${coords}"/><circle cx="${series.length===1?120:230}" cy="${58-(numbers.at(-1)-min)/range*46}" r="3"/></svg><div class="peak-card-foot"><span class="trend-state ${stateClass}">${state}</span><small>${shortDay(series[0].date)} → ${shortDay(series.at(-1).date)} · ${series.length} sesji${deltaText}</small></div></article>`;
+  }).join('')+`<p class="peak-hr-note">Ostatnie HR maks.: ${records.at(-1)?.peak_metrics?.max_hr_bpm??'—'} bpm. Tętno może zmieniać się przez temperaturę i zmęczenie, więc traktuj je jako kontekst, nie ocenę formy.</p>`;
+}
+function renderSplits(activities) {
+  const select=$('#split-activity'),previous=select.value;
+  const choices=activities.filter(a=>Array.isArray(a.splits)&&a.splits.length).sort((a,b)=>a.date.localeCompare(b.date)||a.slot-b.slot);
+  select.innerHTML=choices.map(a=>`<option value="${a.id}">${shortDay(a.date)} · ${esc(labelOf(a))}</option>`).join('');
+  if(choices.some(a=>String(a.id)===previous))select.value=previous;else if(choices.length)select.value=String(choices.at(-1).id);
+  const activity=choices.find(a=>String(a.id)===select.value);
+  if(!activity){$('#split-table').innerHTML='<tr><td colspan="6" class="empty-state">Brak odcinków TCX z ostatnich 12 tygodni. Garmin może zapisać ręczne okrążenia lub odcinki 1 km.</td></tr>';$('#split-note').textContent='Dostępność odcinków zależy od próbek GPS oraz struktury pliku TCX.';return;}
+  $('#split-table').innerHTML=activity.splits.map((split,i)=>{
+    const label=activity.peak_metrics?.split_mode==='laps'?`Okrążenie ${i+1}`:Math.abs(split.distance_km-1)<.02?`1 km · ${i+1}`:`Końcówka · ${i+1}`;
+    return `<tr><td>${label}</td><td>${num(split.distance_km,2)} km</td><td>${time(split.duration_seconds/60)}</td><td>${pace(split.duration_seconds/split.distance_km)}</td><td>${split.avg_hr??'—'} / ${split.max_hr??'—'} bpm</td><td>${split.avg_power!==null?`${num(split.avg_power)} / ${num(split.max_power)} W`:'—'}</td></tr>`;
+  }).join('');
+  $('#split-note').textContent=activity.peak_metrics?.split_mode==='laps'?'Pokazano okrążenia zapisane w Garminie.':'Pokazano automatyczne odcinki kilometrowe wyliczone z próbek GPS.';
 }
 function renderTable() {
   const filter=$('#activity-filter').value;
@@ -542,6 +649,8 @@ $('#today-button').onclick=()=>{month=today.slice(0,7);selected=today;load();};
 $('#add-button').onclick=()=>openActivity();$('#import-button').onclick=()=>openImport();
 $('#settings-button').onclick=openSettings;$('#analysis-settings').onclick=openSettings;
 $('#activity-filter').onchange=()=>data&&renderTable();
+$('#peak-kind-filter').onchange=()=>data&&renderPeakTrends((data.history||[]).filter(a=>RUNNING_KINDS.has(a.kind)));
+$('#split-activity').onchange=()=>data&&renderSplits((data.history||[]).filter(a=>RUNNING_KINDS.has(a.kind)));
 $('#cycle-date').onchange=event=>{if(!event.target.value)return;selected=event.target.value;if(selected.slice(0,7)!==month){month=selected.slice(0,7);load();}else renderCycles();};
 async function submit(form, callback) {
   const button=form.querySelector('[type=submit]');button.disabled=true;form.querySelector('.form-error').textContent='';

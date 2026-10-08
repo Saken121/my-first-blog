@@ -12,6 +12,7 @@ const colors = ['#a7c9c7','#85b297','#d4bd67','#dc9264','#bc6570'];
 const zoneNames = ['Regeneracja','Wytrzymałość tlenowa','Tempo','Próg','Powyżej progu'];
 const num = (n, digits=0) => Number(n || 0).toLocaleString('pl-PL',{maximumFractionDigits:digits});
 const time = mins => mins >= 60 ? `${Math.floor(mins/60)} h ${Math.round(mins%60)} min` : `${num(mins,1)} min`;
+const pace = seconds => {if(!(seconds>0))return '—';const total=Math.round(seconds);return `${Math.floor(total/60)}:${String(total%60).padStart(2,'0')} min/km`;};
 const shortDay = key => parseDate(key).toLocaleDateString('pl-PL',{day:'numeric',month:'short'});
 const activitiesOn = key => data.activities.filter(a=>a.date===key);
 const labelOf = a => a.title || a.kind_label;
@@ -136,14 +137,56 @@ function renderRunningAnalysis() {
     return `<div class="running-type-row"><div class="running-type-name"><strong>${esc(category.label)}</strong><small>${esc(category.note)}</small></div><div class="running-type-track"><span style="width:${width}%"></span></div><span class="running-type-count">${stats.count} ${stats.count===1?'sesja':'sesji'}</span><strong class="running-type-distance">${num(stats.distance,2)} km</strong><span class="running-type-time">${time(stats.minutes)}</span></div>`;
   }).join('');
   $('#running-types').innerHTML=rows;
+  const history=data.history||[];
   const weeks=new Map();
-  for(const activity of data.activities.filter(a=>a.status==='done'&&RUNNING_KINDS.has(a.kind))){
+  for(const activity of history.filter(a=>RUNNING_KINDS.has(a.kind))){
     const date=parseDate(activity.date);date.setDate(date.getDate()-(date.getDay()+6)%7);const key=dateKey(date),week=weeks.get(key)||{date:key,distance:0,count:0};week.distance+=activity.distance_km;week.count++;weeks.set(key,week);
   }
   const values=[...weeks.values()].sort((a,b)=>a.date.localeCompare(b.date)),maximum=Math.max(...values.map(w=>w.distance),1);
   $('#running-weekly-chart').innerHTML=values.length?values.map(w=>`<div class="weekly-row"><span>Od ${shortDay(w.date)}<small>${w.count} ${w.count===1?'bieg':'biegów'}</small></span><div class="weekly-track"><div class="weekly-fill" style="width:${w.distance/maximum*100}%"></div></div><span class="weekly-value">${num(w.distance,1)}<small>km</small></span></div>`).join(''):'<div class="empty-state">Po zapisaniu lub zaimportowaniu biegu zobaczysz kilometraż w kolejnych tygodniach.</div>';
   const recovery=sumFor(['recovery_run','recovery_stretch']);
   $('#running-recovery').innerHTML=recovery.count?`${recovery.count} aktywności regeneracyjne · ${time(recovery.minutes)}${recovery.distance?` · ${num(recovery.distance,2)} km biegu regeneracyjnego`:''}`:'Zapisuj osobno lekki bieg i rozciąganie regeneracyjne, aby śledzić ich regularność.';
+  renderPeakTrends(history.filter(a=>RUNNING_KINDS.has(a.kind)));
+  renderSplits(history.filter(a=>RUNNING_KINDS.has(a.kind)));
+}
+function renderPeakTrends(activities) {
+  const filter=$('#peak-kind-filter');
+  const old=filter.value;
+  filter.innerHTML='<option value="all">Wszystkie rodzaje biegu</option>'+Object.entries(data.kinds).filter(([kind])=>RUNNING_KINDS.has(kind)).map(([kind,label])=>`<option value="${kind}">${esc(label)}</option>`).join('');
+  const preferred=old||activities.at(-1)?.kind||'all';
+  if([...filter.options].some(option=>option.value===preferred))filter.value=preferred;
+  const selected=filter.value,records=activities.filter(a=>selected==='all'||a.kind===selected).sort((a,b)=>a.date.localeCompare(b.date));
+  const definitions=[
+    {key:'speed_5s_kmh',label:'Prędkość maks. (~5 s)',unit:'km/h',higher:true,format:v=>`${num(v,1)} km/h`},
+    {key:'speed_30s_kmh',label:'Prędkość maks. (~30 s)',unit:'km/h',higher:true,format:v=>`${num(v,1)} km/h`},
+    {key:'best_1km_pace_seconds',label:'Najszybszy odcinek 1 km',unit:'min/km',higher:false,format:pace},
+    {key:'power_5s_w',label:'Moc maks. średnia (~5 s)',unit:'W',higher:true,format:v=>`${num(v)} W`}
+  ];
+  $('#peak-trends').innerHTML=definitions.map(definition=>{
+    const series=records.map(a=>({date:a.date,kind:a.kind,label:a.kind_label,value:a.peak_metrics?.[definition.key]})).filter(point=>Number.isFinite(point.value)).slice(-16);
+    if(!series.length)return `<article class="peak-card"><span class="section-eyebrow">${esc(definition.label)}</span><p class="empty-state">Dane pojawią się po imporcie TCX z pomiarami GPS lub mocy.</p></article>`;
+    const numbers=series.map(point=>point.value),min=Math.min(...numbers),max=Math.max(...numbers),range=max-min||1;
+    const coords=series.map((point,i)=>`${series.length===1?120:10+i*220/(series.length-1)},${58-(point.value-min)/range*46}`).join(' ');
+    const sampleCount=Math.min(4,Math.floor(series.length/2)),baseline=sampleCount?numbers.slice(0,sampleCount).reduce((x,y)=>x+y,0)/sampleCount:null,recent=sampleCount?numbers.slice(-sampleCount).reduce((x,y)=>x+y,0)/sampleCount:null;
+    const change=baseline?((recent-baseline)/baseline)*100:0,improving=definition.higher?change>2:change< -2,declining=definition.higher?change< -2:change>2;
+    const state=sampleCount<2?'Za mało sesji na trend':improving?'Średnia z ostatnich sesji rośnie':declining?'Średnia z ostatnich sesji spada':'Ostatnie sesje na podobnym poziomie';
+    const stateClass=sampleCount<2?'neutral':improving?'up':declining?'down':'neutral';
+    const deltaText=sampleCount>=2?` · ${change>0?'+':''}${num(change,1)}% (średnia ${sampleCount} wcześniejszych vs ostatnich sesji)`:'';
+    return `<article class="peak-card"><div class="peak-card-heading"><span class="section-eyebrow">${esc(definition.label)}</span><strong>${definition.format(numbers.at(-1))}</strong></div><svg class="peak-sparkline" viewBox="0 0 240 70" role="img" aria-label="${esc(definition.label)} na ostatnich ${series.length} treningach"><polyline points="${coords}"/><circle cx="${series.length===1?120:230}" cy="${58-(numbers.at(-1)-min)/range*46}" r="3"/></svg><div class="peak-card-foot"><span class="trend-state ${stateClass}">${state}</span><small>${shortDay(series[0].date)} → ${shortDay(series.at(-1).date)} · ${series.length} sesji${deltaText}</small></div></article>`;
+  }).join('')+`<p class="peak-hr-note">Ostatnie HR maks.: ${records.at(-1)?.peak_metrics?.max_hr_bpm??'—'} bpm. Tętno może zmieniać się przez temperaturę i zmęczenie, więc traktuj je jako kontekst, nie ocenę formy.</p>`;
+}
+function renderSplits(activities) {
+  const select=$('#split-activity'),previous=select.value;
+  const choices=activities.filter(a=>Array.isArray(a.splits)&&a.splits.length).sort((a,b)=>a.date.localeCompare(b.date)||a.slot-b.slot);
+  select.innerHTML=choices.map(a=>`<option value="${a.id}">${shortDay(a.date)} · ${esc(labelOf(a))}</option>`).join('');
+  if(choices.some(a=>String(a.id)===previous))select.value=previous;else if(choices.length)select.value=String(choices.at(-1).id);
+  const activity=choices.find(a=>String(a.id)===select.value);
+  if(!activity){$('#split-table').innerHTML='<tr><td colspan="6" class="empty-state">Brak odcinków TCX z ostatnich 12 tygodni. Garmin może zapisać ręczne okrążenia lub odcinki 1 km.</td></tr>';$('#split-note').textContent='Dostępność odcinków zależy od próbek GPS oraz struktury pliku TCX.';return;}
+  $('#split-table').innerHTML=activity.splits.map((split,i)=>{
+    const label=activity.peak_metrics?.split_mode==='laps'?`Okrążenie ${i+1}`:Math.abs(split.distance_km-1)<.02?`1 km · ${i+1}`:`Końcówka · ${i+1}`;
+    return `<tr><td>${label}</td><td>${num(split.distance_km,2)} km</td><td>${time(split.duration_seconds/60)}</td><td>${pace(split.duration_seconds/split.distance_km)}</td><td>${split.avg_hr??'—'} / ${split.max_hr??'—'} bpm</td><td>${split.avg_power!==null?`${num(split.avg_power)} / ${num(split.max_power)} W`:'—'}</td></tr>`;
+  }).join('');
+  $('#split-note').textContent=activity.peak_metrics?.split_mode==='laps'?'Pokazano okrążenia zapisane w Garminie.':'Pokazano automatyczne odcinki kilometrowe wyliczone z próbek GPS.';
 }
 function renderTable() {
   const filter=$('#activity-filter').value;
@@ -226,6 +269,8 @@ $('#today-button').onclick=()=>{month=today.slice(0,7);selected=today;load();};
 $('#add-button').onclick=()=>openActivity();$('#import-button').onclick=()=>openImport();
 $('#settings-button').onclick=openSettings;$('#analysis-settings').onclick=openSettings;
 $('#activity-filter').onchange=()=>data&&renderTable();
+$('#peak-kind-filter').onchange=()=>data&&renderPeakTrends((data.history||[]).filter(a=>RUNNING_KINDS.has(a.kind)));
+$('#split-activity').onchange=()=>data&&renderSplits((data.history||[]).filter(a=>RUNNING_KINDS.has(a.kind)));
 $('#cycle-date').onchange=event=>{if(!event.target.value)return;selected=event.target.value;if(selected.slice(0,7)!==month){month=selected.slice(0,7);load();}else renderCycles();};
 async function submit(form, callback) {
   const button=form.querySelector('[type=submit]');button.disabled=true;form.querySelector('.form-error').textContent='';

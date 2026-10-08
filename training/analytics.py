@@ -24,6 +24,7 @@ def serialize(activity, limits):
         'rpe': activity.rpe, 'notes': activity.notes, 'source': activity.source,
         'imported_filename': activity.imported_filename,
         'avg_power': activity.avg_power, 'max_power': activity.max_power,
+        'splits': activity.splits, 'peak_metrics': activity.peak_metrics,
         'zones_seconds': zones,
         'unknown_hr_seconds': max(0, activity.duration_seconds - sum(zones)),
         'load': round(activity.duration_seconds / 60 * activity.rpe) if activity.rpe else None,

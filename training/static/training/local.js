@@ -68,6 +68,9 @@
       if(!['manual','tcx'].includes(item.source)) fail('Nieprawidłowe źródło aktywności w kopii.');
       a.source=item.source;a.imported_filename=String(item.imported_filename??'').slice(0,200);
       a.avg_power=number(item.avg_power,'średnia moc',0,5000,true,true);a.max_power=number(item.max_power,'maksymalna moc',0,5000,true,true);
+      a.splits=Array.isArray(item.splits)?item.splits.slice(0,1000).map(s=>({distance_km:number(s.distance_km,'dystans odcinka',0,100,true),duration_seconds:number(s.duration_seconds,'czas odcinka',0,86400),avg_hr:number(s.avg_hr,'średnie tętno odcinka',20,250,true,true),max_hr:number(s.max_hr,'maksymalne tętno odcinka',20,250,true,true),avg_power:number(s.avg_power,'średnia moc odcinka',0,5000,true,true),max_power:number(s.max_power,'maksymalna moc odcinka',0,5000,true,true)})):[];
+      const peaks=item.peak_metrics&&typeof item.peak_metrics==='object'?item.peak_metrics:{};
+      a.peak_metrics={speed_5s_kmh:number(peaks.speed_5s_kmh,'prędkość 5 s',0,80,false,true),speed_30s_kmh:number(peaks.speed_30s_kmh,'prędkość 30 s',0,80,false,true),best_1km_pace_seconds:number(peaks.best_1km_pace_seconds,'tempo 1 km',0,3600,false,true),power_5s_w:number(peaks.power_5s_w,'moc 5 s',0,5000,true,true),max_hr_bpm:number(peaks.max_hr_bpm,'maksymalne tętno',20,250,true,true),split_mode:['laps','kilometers'].includes(peaks.split_mode)?peaks.split_mode:''};
       if(!Array.isArray(item.hr_segments)||item.hr_segments.length>1000) fail('Nieprawidłowe próbki HR w kopii.');
       a.hr_segments=item.hr_segments.map(s=>{
         if(!Array.isArray(s)||s.length!==2) fail('Nieprawidłowa próbka HR.');
@@ -126,7 +129,8 @@
     const matches=db.activities.filter(isMatch),cycles={};
     for(let key=first;key.startsWith(month);key=shift(key,1)) cycles[key]=microcycle(key,matches);
     const next=matches.filter(a=>a.date>=warsawDate()).sort((a,b)=>a.date.localeCompare(b.date)||a.slot-b.slot)[0];
-    return {activities:activities.map(a=>serialize(a,db.profile)),summary:summary(activities,db.profile),profile:clone(db.profile),kinds:KINDS,next_match:next?serialize(next,db.profile):null,microcycles:cycles};
+    const current=warsawDate(),historyStart=shift(current,-83),history=db.activities.filter(a=>a.status==='done'&&a.date>=historyStart&&a.date<=current).sort((a,b)=>a.date.localeCompare(b.date)||a.slot-b.slot);
+    return {activities:activities.map(a=>serialize(a,db.profile)),history:history.map(a=>serialize(a,db.profile)),summary:summary(activities,db.profile),profile:clone(db.profile),kinds:KINDS,next_match:next?serialize(next,db.profile):null,microcycles:cycles};
   }
   const children=(node,name)=>[...node.children].filter(n=>n.localName===name);
   const descendants=(node,name)=>[...node.getElementsByTagName('*')].filter(n=>n.localName===name);
@@ -139,15 +143,54 @@
     validDate(value.trim().slice(0,10));const n=Date.parse(value.trim());if(!Number.isFinite(n))fail('Nieprawidłowy czas w TCX.');return n;
   }
   function roundEven(n){const floor=Math.floor(n);return n-floor===.5?floor+(floor%2):Math.round(n);}
+  function splitRow(distance,seconds,points) {
+    const hr=points.map(p=>p.hr).filter(n=>n!==null),power=points.map(p=>p.power).filter(n=>n!==null);
+    return {distance_km:Math.round(distance/1000*1000)/1000,duration_seconds:Math.round(seconds*100)/100,avg_hr:hr.length?roundEven(hr.reduce((a,b)=>a+b,0)/hr.length):null,max_hr:hr.length?Math.max(...hr):null,avg_power:power.length?roundEven(power.reduce((a,b)=>a+b,0)/power.length):null,max_power:power.length?Math.max(...power):null};
+  }
+  function automaticSplits(points) {
+    points=points.filter(p=>p.t!==null&&p.distance!==null).sort((a,b)=>a.t-b.t);if(points.length<2)return [];
+    let startTime=points[0].t,startDistance=points[0].distance,boundary=startDistance+1000,chunk=[points[0]],previous=points[0];const result=[];
+    for(const current of points.slice(1)) {
+      if(current.t<=previous.t){previous=current;continue;}
+      if(current.t-previous.t>120||current.distance<previous.distance){startTime=current.t;startDistance=current.distance;boundary=startDistance+1000;chunk=[current];previous=current;continue;}
+      while(current.distance>=boundary&&current.distance>previous.distance) {
+        const fraction=(boundary-previous.distance)/(current.distance-previous.distance),splitTime=previous.t+fraction*(current.t-previous.t),interpolated={t:splitTime,distance:boundary,hr:null,power:null};
+        const samples=chunk.filter(p=>p.t>=startTime&&p.t<splitTime);samples.push(interpolated);
+        const elapsed=splitTime-startTime,distance=boundary-startDistance;if(elapsed>0&&distance>0)result.push(splitRow(distance,elapsed,samples));
+        startTime=splitTime;startDistance=boundary;chunk=[interpolated];boundary+=1000;
+      }
+      chunk.push(current);previous=current;
+    }
+    const last=points.at(-1),distance=last.distance-startDistance;
+    if(distance>20&&last.t>startTime)result.push(splitRow(distance,last.t-startTime,chunk.filter(p=>p.t>=startTime&&p.t<=last.t)));
+    return result;
+  }
+  function peakSpeed(points,window) {
+    let best=null;
+    for(let end=1;end<points.length;end++)for(let start=end-1;start>=0;start--){
+      const elapsed=points[end].t-points[start].t;if(elapsed>window*1.2)break;if(elapsed<window*.8||elapsed<=0)continue;
+      const distance=points[end].distance-points[start].distance,speed=distance/elapsed*3.6;if(distance>=window*2&&speed<=45&&(best===null||speed>best))best=speed;
+    }
+    return best===null?null:Math.round(best*100)/100;
+  }
+  function peakPower(points,window=5) {
+    let best=null;
+    for(let end=1;end<points.length;end++)for(let start=end-1;start>=0;start--){
+      const elapsed=points[end].t-points[start].t;if(elapsed>window*1.2)break;if(elapsed<window*.8||elapsed<=0)continue;
+      const values=points.slice(start,end+1).map(p=>p.power).filter(n=>n!==null);if(values.length<2)continue;const value=values.reduce((a,b)=>a+b,0)/values.length;if(best===null||value>best)best=value;
+    }
+    return best===null?null:roundEven(best);
+  }
   function parseTCX(text) {
     if(!text||/<!DOCTYPE|<!ENTITY/i.test(text))fail('Nieprawidłowy lub niedozwolony plik XML/TCX.');
     const xml=new DOMParser().parseFromString(text,'application/xml');
     if(descendants(xml,'parsererror').length||xml.documentElement.localName!=='TrainingCenterDatabase')fail('To nie jest poprawny plik Garmin TCX.');
     const activities=descendants(xml,'Activity');if(activities.length!==1)fail('Importuj plik TCX zawierający jedną aktywność.');
-    const a=activities[0],starts=[],timestamps=[],hearts=[],powers=[],durations=[],distances=[],samples=new Map();let fallback=0,powerWeighted=0,powerSeconds=0;
+    const a=activities[0],starts=[],timestamps=[],hearts=[],powers=[],durations=[],distances=[],samples=new Map(),allPoints=[],lapRows=[];let fallback=0,powerWeighted=0,powerSeconds=0;
     for(const lap of children(a,'Lap')) {
       if(lap.getAttribute('StartTime'))starts.push(xmlTime(lap.getAttribute('StartTime')));
       for(const [name,target] of [['TotalTimeSeconds',durations],['DistanceMeters',distances]])for(const node of children(lap,name)){const n=xmlNumber(node,name);if(n!==null)target.push(n);}
+      const lapPoints=[];
       for(const track of children(lap,'Track')) {
         let previous=null;
         for(const point of children(track,'Trackpoint')) {
@@ -155,7 +198,7 @@
           const hrNode=children(point,'HeartRateBpm')[0];let hr=hrNode?xmlNumber(hrNode,'Value'):null;
           hr=hr!==null&&hr>=20&&hr<=250?roundEven(hr):null;
           const distance=xmlNumber(point,'DistanceMeters');let power=xmlNumber(point,'Watts');if(power>5000)power=null;
-          if(timestamp!==null)timestamps.push(timestamp);if(hr)hearts.push(hr);if(power!==null)powers.push(power);
+          if(timestamp!==null)timestamps.push(timestamp);if(hr)hearts.push(hr);if(power!==null)powers.push(power);if(timestamp!==null&&distance!==null)lapPoints.push({t:timestamp/1000,distance,hr,power});
           if(previous) {
             if(timestamp!==null&&previous.timestamp!==null){const seconds=(timestamp-previous.timestamp)/1000;if(seconds>0&&seconds<=120){if(previous.hr)samples.set(previous.hr,(samples.get(previous.hr)||0)+seconds);if(previous.power!==null){powerWeighted+=previous.power*seconds;powerSeconds+=seconds;}}}
             if(distance!==null&&previous.distance!==null)fallback+=Math.max(0,distance-previous.distance);
@@ -163,6 +206,9 @@
           previous={timestamp,hr,distance,power};
         }
       }
+      lapPoints.sort((x,y)=>x.t-y.t);allPoints.push(...lapPoints);
+      const lapDuration=xmlNumber(lap,'TotalTimeSeconds'),lapDistance=xmlNumber(lap,'DistanceMeters');
+      if(lapDuration&&lapDistance>0){const row=splitRow(lapDistance,lapDuration,lapPoints),avg=children(lap,'AverageHeartRateBpm')[0],max=children(lap,'MaximumHeartRateBpm')[0],avgValue=avg?xmlNumber(avg,'Value'):null,maxValue=max?xmlNumber(max,'Value'):null;if(avgValue!==null&&avgValue>=20&&avgValue<=250)row.avg_hr=roundEven(avgValue);if(maxValue!==null&&maxValue>=20&&maxValue<=250)row.max_hr=roundEven(maxValue);lapRows.push(row);}
     }
     if(!starts.length&&!timestamps.length){const id=children(a,'Id')[0];if(id)starts.push(xmlTime(id.textContent));}
     const times=[...starts,...timestamps];if(!times.length)fail('Plik nie zawiera daty aktywności.');
@@ -175,7 +221,9 @@
     let max_hr=hearts.length?hearts.reduce((max,v)=>Math.max(max,v),0):null;
     if(max_hr===null)for(const node of descendants(a,'MaximumHeartRateBpm')){const n=xmlNumber(node,'Value');if(n!==null&&n>=20&&n<=250)max_hr=Math.max(max_hr||0,roundEven(n));}
     const meters=distances.length?distances.reduce((x,y)=>x+y,0):fallback;if(!Number.isFinite(meters)||meters>1000000)fail('Nieprawidłowy dystans w TCX.');
-    return {date:warsawDate(new Date(earliest)),kind:a.getAttribute('Sport')==='Biking'?'cycling':'endurance',duration_seconds:Math.round(duration*100)/100,distance_km:Math.round(meters)/1000,avg_hr,max_hr,avg_power:powerSeconds?roundEven(powerWeighted/powerSeconds):null,max_power:powers.length?roundEven(powers.reduce((max,v)=>Math.max(max,v),0)):null,hr_segments:[...samples].sort((a,b)=>a[0]-b[0]).map(([hr,s])=>[hr,Math.round(s*1000)/1000])};
+    const kilometerSplits=automaticSplits(allPoints),splits=lapRows.length>1?lapRows:kilometerSplits,paceSplits=kilometerSplits.length?kilometerSplits:splits,oneKmPaces=paceSplits.filter(s=>s.distance_km>=.9&&s.distance_km<=1.1).map(s=>s.duration_seconds/s.distance_km),points=allPoints.sort((x,y)=>x.t-y.t);
+    const peak_metrics={speed_5s_kmh:peakSpeed(points,5),speed_30s_kmh:peakSpeed(points,30),best_1km_pace_seconds:oneKmPaces.length?Math.round(Math.min(...oneKmPaces)*100)/100:null,power_5s_w:peakPower(points),max_hr_bpm:max_hr,split_mode:lapRows.length>1?'laps':splits.length?'kilometers':''};
+    return {date:warsawDate(new Date(earliest)),kind:a.getAttribute('Sport')==='Biking'?'cycling':'endurance',duration_seconds:Math.round(duration*100)/100,distance_km:Math.round(meters)/1000,avg_hr,max_hr,avg_power:powerSeconds?roundEven(powerWeighted/powerSeconds):null,max_power:powers.length?roundEven(powers.reduce((max,v)=>Math.max(max,v),0)):null,hr_segments:[...samples].sort((a,b)=>a[0]-b[0]).map(([hr,s])=>[hr,Math.round(s*1000)/1000]),splits,peak_metrics};
   }
   function freeSlot(db,date,id=null,slot=null) {
     const occupied=db.activities.filter(a=>a.date===date&&a.id!==id).map(a=>a.slot);
@@ -196,7 +244,7 @@
     if(parsed.pathname==='/api/profile/'&&method==='POST'){db.profile=validateProfile(JSON.parse(options.body));persist(db);return {saved:true};}
     const detail=parsed.pathname.match(/^\/api\/activities\/(\d+)\/$/);
     if(detail){const id=Number(detail[1]),index=db.activities.findIndex(a=>a.id===id);if(index<0)fail('Nie znaleziono aktywności.');if(method==='DELETE'){db.activities.splice(index,1);persist(db);return {deleted:true};}if(method==='POST'){const a=validateActivity(JSON.parse(options.body),db.activities[index]);freeSlot(db,a.date,id,a.slot);db.activities[index]=a;persist(db);return serialize(a,db.profile);}}
-    if(parsed.pathname==='/api/activities/'&&method==='POST'){const a=validateActivity(JSON.parse(options.body));freeSlot(db,a.date,null,a.slot);Object.assign(a,{id:db.nextId++,source:'manual',hr_segments:[],imported_filename:'',avg_power:null,max_power:null});db.activities.push(a);persist(db);return serialize(a,db.profile);}
+    if(parsed.pathname==='/api/activities/'&&method==='POST'){const a=validateActivity(JSON.parse(options.body));freeSlot(db,a.date,null,a.slot);Object.assign(a,{id:db.nextId++,source:'manual',hr_segments:[],imported_filename:'',avg_power:null,max_power:null,splits:[],peak_metrics:{}});db.activities.push(a);persist(db);return serialize(a,db.profile);}
     fail('Nieobsługiwana operacja.');
   }
   function download(contents,filename,type) {

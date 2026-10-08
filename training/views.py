@@ -45,10 +45,13 @@ def state(request):
         return _error('Nieprawidłowy miesiąc.')
     config = _profile()
     activities = list(Activity.objects.filter(date__range=(first, last)))
+    today = timezone.localdate()
+    history = list(Activity.objects.filter(date__range=(today - timedelta(days=83), today), status='done'))
     matches = list(Activity.objects.filter(date__range=(first - timedelta(days=7), last + timedelta(days=7)), kind__in=MATCH_KINDS))
     next_match = Activity.objects.filter(date__gte=timezone.localdate(), kind__in=MATCH_KINDS).first()
     return JsonResponse({
         'activities': [serialize(a, config.limits()) for a in activities],
+        'history': [serialize(a, config.limits()) for a in history],
         'summary': summary(activities, config.limits()),
         'profile': {'hr_max': config.hr_max, 'hr_lthr': config.hr_lthr, 'hr_rest': config.hr_rest,
                     'threshold_power': config.threshold_power, 'power_sport': config.power_sport, 'zone_limits': config.limits()},
