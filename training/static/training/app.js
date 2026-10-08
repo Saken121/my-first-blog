@@ -23,6 +23,7 @@ function notify(message) {
 }
 function csrf() { return document.cookie.split('; ').find(c=>c.startsWith('csrftoken='))?.split('=')[1] || ''; }
 async function request(url, options={}) {
+  if (window.FormaLocal) return window.FormaLocal.request(url, options);
   const headers = {'X-CSRFToken':csrf(), ...options.headers};
   if(options.body && !(options.body instanceof FormData)) headers['Content-Type']='application/json';
   const response = await fetch(url,{...options,headers,credentials:'same-origin'});
@@ -43,7 +44,7 @@ async function load() {
 }
 function render() {
   $('#month-label').textContent=parseDate(month+'-01').toLocaleDateString('pl-PL',{month:'long',year:'numeric'});
-  $('#export-link').href=`/api/export/?month=${month}`;
+  $('#export-link').href=window.FormaLocal?'#':`/api/export/?month=${month}`;
   $('#metric-count').textContent=data.summary.completed;
   $('#metric-planned').textContent=`${data.summary.planned} ${data.summary.planned===1?'aktywność w planie':'aktywności w planie'}`;
   $('#metric-time').textContent=time(data.summary.minutes);
@@ -223,4 +224,5 @@ $('#settings-form').onsubmit=event=>{
     await request('/api/profile/',{method:'POST',body:JSON.stringify(values)});$('#settings-dialog').close();await load();notify('Strefy zapisane. Analiza została przeliczona.');
   });
 };
+if (window.FormaLocal) window.FormaLocal.installUI({load, notify, getMonth:()=>month, today});
 load();

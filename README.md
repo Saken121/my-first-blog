@@ -1,8 +1,18 @@
 # Forma — dziennik treningowy sędziego
 
-Aplikacja do planowania treningów, meczów i regeneracji oraz analizy plików Garmin TCX. Działa w przeglądarce i zapisuje dane w lokalnej bazie SQLite (`db.sqlite3`). Interfejs jest po polsku i dostosowuje się do telefonu.
+Aplikacja do planowania treningów, meczów i regeneracji oraz analizy plików Garmin TCX. **Najprostsza wersja to jeden plik HTML: działa offline w przeglądarce, bez Pythona, instalowania dodatków i uruchamiania serwera.** Interfejs jest po polsku i dostosowuje się do telefonu.
 
-## Uruchomienie
+## Uruchomienie bez instalacji
+
+1. [Pobierz prostą aplikację ZIP](https://github.com/Saken121/my-first-blog/raw/refs/heads/forma-download/downloads/forma-prosta.zip).
+2. Rozpakuj ZIP i otwórz **Forma.html** dwuklikiem w Chrome, Edge lub Firefox.
+3. Planuj i importuj TCX. Po pobraniu aplikacja działa bez internetu.
+
+Wszystkie style i funkcje są w tym jednym pliku. Nie potrzebujesz dodatkowych plików ani konta. Dane są zapisywane w tej przeglądarce, na tym urządzeniu. Otwieraj ten sam plik w tej samej przeglądarce. Przyciskiem **Kopia danych** pobierz pełny dziennik w JSON; można go potem przywrócić na innym komputerze. Zrób kopię przed przeniesieniem pliku, zmianą przeglądarki lub wyczyszczeniem danych przeglądania. Tryb prywatny może usuwać dane po zamknięciu okna.
+
+## Opcjonalna wersja serwerowa Django
+
+Poniższe polecenia dotyczą alternatywnej wersji serwerowej. Nie są potrzebne do otwarcia `Forma.html`.
 
 Potrzebujesz **Pythona 3.12 lub nowszego** i dostępu do PyPI podczas pierwszej instalacji.
 
@@ -63,7 +73,7 @@ W **Strefach tętna** możesz zmienić parametry i każdą granicę, także zgod
 
 ## Dane i testy
 
-Kopiuj `db.sqlite3`, gdy serwer jest zatrzymany, aby zachować pełną kopię danych. CSV jest eksportem zestawienia i nie zastępuje kopii bazy. Program jest przygotowany do osobistego użycia lokalnego, bez kont użytkowników.
+W prostej aplikacji używaj **Kopia danych → Pobierz kopię JSON**. Przywrócenie JSON odtwarza kalendarz, ustawienia stref i próbki HR; zastępuje obecny dziennik po potwierdzeniu. CSV jest zestawieniem do analizy, a nie pełną kopią danych. Program służy do osobistego użycia, bez kont użytkowników. W opcjonalnej wersji Django kopię stanowi plik `db.sqlite3`, kopiowany przy zatrzymanym serwerze.
 
 ```bash
 .venv/bin/python manage.py check
@@ -72,3 +82,14 @@ Kopiuj `db.sqlite3`, gdy serwer jest zatrzymany, aby zachować pełną kopię da
 ```
 
 Testy obejmują import, próbki HR/mocy, zmianę stref, limity kalendarza, edycję, usuwanie, mikrocykle, ochronę CSRF i eksport. Stary blog z repozytorium nadal znajduje się pod ścieżką `/blog/`.
+
+### Budowanie i sprawdzanie prostej aplikacji
+
+Polecenia dla programisty (użytkownik gotowego HTML nie potrzebuje tych narzędzi):
+
+```bash
+python3 tools/build_standalone.py
+node tools/test_standalone.cjs
+```
+
+Budowanie używa wyłącznie standardowej biblioteki Pythona. Testy korzystają z Playwright i Chromium dostępnych w środowisku chmurowym. `FORMA_HTML` wskazuje inny plik do sprawdzenia, a `FORMA_CHROMIUM` inną lokalizację przeglądarki. Opcja `--output /tmp/forma-build` pozwala budować poza repozytorium. Testy sprawdzają m.in. import TCX, strefy, limity dwóch aktywności, mikrocykle, trwały zapis, kopie JSON i eksport CSV przy wyłączonej sieci. Gdy zarządzana przeglądarka blokuje `file://`, test używa identycznego HTML w lokalnym źródle obsłużonym z pamięci, bez zmiany zasad przeglądarki.

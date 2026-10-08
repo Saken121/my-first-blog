@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173c35">
+  <title>Forma — dziennik treningowy sędziego</title>
+  <style>:root{--green:#173c35;--green-light:#e7efeb;--mint:#c9dfcf;--ink:#20352f;--muted:#79847e;--line:#e4e8e1;--bg:#f6f7f2;--orange:#c57955;--orange-bg:#faece4;--z1:#a7c9c7;--z2:#85b297;--z3:#d4bd67;--z4:#dc9264;--z5:#bc6570;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);font-size:14px}*{box-sizing:border-box}body{margin:0;background:var(--bg)}button,input,select,textarea{font:inherit}button,a,input,select,textarea{outline-offset:4px}button{cursor:pointer}button:disabled{cursor:wait;opacity:.6}a{color:inherit}svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}.icon-defs{position:absolute;width:0;height:0}.sidebar{position:fixed;inset:0 auto 0 0;width:225px;background:var(--green);color:#eff5ed;padding:34px 22px 22px;display:flex;flex-direction:column;z-index:10}.brand{display:flex;align-items:center;gap:12px;font-size:35px;font-weight:700;letter-spacing:-2px;text-decoration:none}.brand-mark{display:flex;width:36px;height:38px;align-items:center;justify-content:center;background:#d8e5c8;color:var(--green);border-radius:11px;font-family:Georgia,serif;font-style:italic;font-size:37px;letter-spacing:-3px}.brand-mark span{font-size:25px;padding-top:12px}.brand-dot{color:#bacead}.brand-caption{font-size:9px;letter-spacing:1.9px;margin:12px 0 0;color:#b2c5ba}.sidebar-rule{border-top:1px solid #ffffff18;margin:31px 0 25px}.nav-caption,.tiny-label{font-size:9px;letter-spacing:1.6px;color:#94afa0}.nav-caption{padding-left:10px;margin-bottom:12px}.nav-item{display:flex;align-items:center;gap:12px;padding:14px 13px;border:0;border-radius:8px;width:100%;color:#b8cec2;background:none;text-align:left;font-size:12px;margin-bottom:6px;white-space:nowrap}.nav-item:hover{background:#ffffff09}.nav-item.active{color:#f3f6ec;background:#ffffff12}.nav-item svg{width:18px}.nav-indicator{margin-left:auto;width:5px;height:5px;border-radius:50%;background:#c5d6af}.sidebar-bottom{margin-top:auto}.side-note{margin:38px 3px 25px}.side-note p{font-size:12px;color:#bed0c5;line-height:1.9}.field-lines{height:52px;width:100%;position:relative;border:1px solid #adc7ac26;border-radius:5px;overflow:hidden;margin-top:23px}.field-lines:before{content:'';position:absolute;width:1px;height:100%;left:50%;background:#adc7ac26}.field-lines:after{content:'';position:absolute;left:calc(50% - 15px);top:10px;width:30px;height:30px;border:1px solid #adc7ac26;border-radius:50%}.field-lines i:first-child{position:absolute;left:-1px;top:14px;width:19px;height:24px;border:1px solid #adc7ac26}.field-lines i:nth-child(2){position:absolute;right:-1px;top:14px;width:19px;height:24px;border:1px solid #adc7ac26}.settings-button{display:flex;align-items:center;gap:12px;border:0;background:none;color:#b8cec2;padding:15px 10px;width:100%;text-align:left;font-size:12px}.profile-dot{border-top:1px solid #ffffff18;padding-top:20px;display:flex;gap:11px;align-items:center;font-size:11px;margin-top:8px}.profile-dot>span{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#536f5a;font-family:Georgia,serif;font-size:17px}.profile-dot small{display:block;font-size:9px;color:#92ae9f;margin-top:5px}main{margin-left:225px;max-width:1850px;padding:39px 40px 20px}.page-header{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:31px}.eyebrow{font-size:9px;letter-spacing:1.5px;color:#7b897e;display:flex;align-items:center;gap:7px}.status-dot{width:5px;height:5px;border-radius:50%;background:#8eaa85}h1{font-size:32px;letter-spacing:-1.3px;font-weight:550;line-height:1.2;margin:13px 0 10px}.page-header p{font-size:12px;color:var(--muted);margin:0}.button{display:inline-flex;justify-content:center;align-items:center;gap:9px;border-radius:7px;padding:11px 16px;font-size:11px;font-weight:550;border:1px solid transparent;white-space:nowrap}.button.primary{background:var(--green);color:white}.button.primary:hover{background:#29594b}.button.secondary{background:#fff;border-color:var(--line);color:var(--ink)}.button.secondary:hover{background:#edf2eb}.button svg{width:15px;height:15px}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:30px}.metric{background:white;border:1px solid var(--line);padding:19px 21px;border-radius:10px;min-height:125px;box-shadow:0 3px 10px #173c3502}.metric-label{display:flex;align-items:center;justify-content:space-between;color:#708079;font-size:11px;gap:6px}.metric-label svg{width:16px;height:16px;color:#94a599}.metric strong{display:block;font-size:29px;font-weight:550;letter-spacing:-.7px;margin:12px 0 5px}.metric strong small{font-size:15px;color:#859087;font-weight:400;letter-spacing:0}.metric>span{font-size:9px;color:var(--muted)}.metric.accent{background:#eaf0e7;border-color:#dce5d6}.metric.accent .metric-label svg{color:#739070}.workspace-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:10px}.month-navigation{display:flex;align-items:center;gap:11px}.month-navigation h2{font-size:19px;font-weight:550;margin:0;min-width:178px;text-transform:capitalize;letter-spacing:-.5px}.icon-button{display:grid;place-items:center;background:#fff;border:1px solid var(--line);width:28px;height:28px;border-radius:5px;color:#859087}.icon-button svg{width:14px;height:14px}.reverse{transform:rotate(180deg)}.today-button{background:none;border:1px solid #dce2d8;border-radius:5px;padding:6px 10px;color:#65776b;font-size:10px;margin-left:6px}.toolbar-actions{display:flex;align-items:center;gap:18px}.text-button{border:0;background:none;color:#667a6f;font-size:11px;padding:3px;text-decoration:none;cursor:pointer}.text-button:hover{color:var(--green)}.calendar-layout{display:grid;grid-template-columns:minmax(0,1fr) 242px;gap:19px}.calendar-panel{border:1px solid var(--line);background:white;border-radius:10px;overflow:hidden}.calendar-topline{display:flex;gap:15px;align-items:center;padding:15px 18px;font-size:9px;color:#7c8a7e;border-bottom:1px solid var(--line)}.calendar-topline>span{display:flex;align-items:center;gap:5px}.small-dot{width:5px;height:5px;border-radius:50%;display:inline-block;flex:none}.match-dot{background:var(--orange)}.done-dot{background:#759a83}.planned-dot{background:#c3cbc3}.today-dot{background:var(--green)}.calendar-hint{margin-left:auto;color:#a1aaa2;font-size:9px}.weekday-row{display:grid;grid-template-columns:repeat(7,1fr);background:#fafbf8;border-bottom:1px solid var(--line);padding:12px 0;font-size:9px;letter-spacing:.6px;color:#8c978e;text-align:center}.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}.day-cell{min-height:102px;padding:8px 6px;border-right:1px solid #edf0e9;border-bottom:1px solid #edf0e9;position:relative;transition:background .15s}.day-cell:nth-child(7n){border-right:0}.day-cell:hover{background:#fbfcf7}.day-cell.outside{background:#fbfcf9}.day-cell.selected{background:#f1f5eb;box-shadow:inset 0 0 0 1px #bdceac}.day-cell.match-day{background:#fff8f3}.day-cell.match-day.selected{box-shadow:inset 0 0 0 1px #d6b79b}.day-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;min-height:23px;padding:0 3px}.day-number{border:0;background:none;padding:0;width:24px;height:24px;border-radius:50%;font-size:11px;color:#64746a}.day-number.today{background:var(--green);color:white}.outside .day-number{color:#c3cbc0}.day-badge{font-size:7px;color:#b67b59;letter-spacing:.4px}.day-slot{display:flex;align-items:center;gap:4px;max-width:100%;width:100%;border:0;border-radius:4px;min-height:22px;margin:3px 0;padding:4px 5px;text-align:left;font-size:8px;background:#eff3ed;color:#47624f}.day-slot .slot-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.day-slot.empty{background:none;color:#c3cbbf;justify-content:center;border:1px dashed #e9ede5;font-size:11px;min-height:21px}.day-slot.empty:hover{background:#e5eddf;border-color:#c3d0b4;color:#526b51}.day-slot.match{background:#f8e6d9;color:#ac6845}.day-slot.done{background:#e6efea}.day-slot.planned{background:#f1f2ef;color:#768275}.day-slot .done-check{width:9px;height:9px;stroke-width:2.2}.calendar-footer{padding:12px 17px;font-size:9px;color:#7a8b7c;display:flex;align-items:center;gap:5px}.calendar-footer>span:last-child{margin-left:auto;color:#a1aaa2;font-size:8px}.day-panel{background:white;border:1px solid var(--line);border-radius:10px;padding:21px 18px}.section-eyebrow{font-size:8px;letter-spacing:1.4px;color:#8b988d;font-weight:550}.day-panel h3{font-size:17px;font-weight:550;letter-spacing:-.3px;margin:8px 0 20px;text-transform:capitalize}.day-activity{padding:13px 0;border-top:1px solid var(--line)}.activity-kicker{display:flex;align-items:center;justify-content:space-between;font-size:8px;color:#94a092;margin-bottom:8px}.day-activity button{border:0;background:none;color:var(--ink);padding:0;text-align:left;width:100%}.day-activity strong{display:block;font-size:11px;font-weight:500;margin-bottom:7px}.activity-details{font-size:9px;color:#8b968c;line-height:1.6}.day-add{display:flex;align-items:center;gap:9px;font-size:11px;color:#8a9c89;border:1px dashed #dde5d7;border-radius:6px;padding:11px;width:100%;background:none}.day-add:hover{background:#f4f7ef}.cycle-suggestion{background:#f1f4e9;border:1px solid #e3e8d8;border-radius:8px;padding:15px;margin-top:19px}.cycle-badge{display:inline-block;font-size:8px;background:#e0e8d3;color:#64805c;border-radius:4px;padding:4px 6px;letter-spacing:.5px}.cycle-suggestion h4{font-size:11px;font-weight:550;margin:11px 0 8px}.cycle-suggestion p{font-size:10px;color:#86937a;line-height:1.7;margin:0 0 14px}.cycle-suggestion .text-button{color:#65805a;font-size:9px;padding:0}.next-match{padding-top:19px;margin-top:22px;border-top:1px solid var(--line)}.next-match>div{font-size:10px;color:#89958a;line-height:1.8;margin-top:9px}.next-match strong{display:block;color:#b47a58;font-weight:550}.bottom-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:19px;margin-top:20px}.card{background:white;border:1px solid var(--line);border-radius:10px;padding:23px}.card-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}.card h3{font-size:16px;letter-spacing:-.3px;font-weight:550;margin:8px 0 20px}.card-heading h3{margin-bottom:15px}.zone-stack{display:flex;height:11px;border-radius:4px;overflow:hidden;background:#edf0e9;margin:4px 0 20px}.zone-row{display:grid;grid-template-columns:25px 118px 1fr 70px;gap:8px;align-items:center;margin:10px 0;font-size:10px;color:#7d8c81}.zone-label{font-weight:550}.zone-track{background:#f1f3ed;height:6px;border-radius:4px;overflow:hidden}.zone-fill{height:100%;border-radius:4px}.zone-value{text-align:right;font-size:10px}.zone-nodata{font-size:10px;color:#929e91;margin-top:14px;line-height:1.7}.empty-state{padding:19px 0;color:#99a593;font-size:11px;line-height:1.8}.type-row{display:grid;grid-template-columns:1fr 54px 65px;gap:9px;align-items:center;padding:10px 0;border-bottom:1px solid #f0f2eb;font-size:11px}.type-row:last-child{border-bottom:0}.type-row>span:nth-child(2){font-size:9px;color:#98a191;text-align:right}.type-row>strong{font-size:10px;font-weight:500;text-align:right;color:#6c7c6c}.type-label{display:flex;align-items:center;gap:7px}.type-mark{width:6px;height:6px;border-radius:2px;background:#a8bea1}.main-footer{display:flex;justify-content:space-between;margin-top:30px;color:#9ba597;font-size:8px;border-top:1px solid var(--line);padding-top:16px}.main-footer>span:first-child{font-size:13px;font-weight:600;color:#7b8b77}.main-footer>span:first-child span{font-size:8px;font-weight:400;margin-left:12px}.analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.analysis-grid .wide{grid-column:1/-1}.footnote{font-size:10px;color:#8d998f;line-height:1.8}.hr-overview{display:flex;gap:30px;padding:14px 0 0;border-top:1px solid var(--line);font-size:10px;color:#7d8c7f}.hr-overview strong{display:block;font-size:22px;font-weight:500;color:var(--ink);margin-bottom:4px}.weekly-row{display:grid;grid-template-columns:72px 1fr 62px;align-items:center;gap:10px;margin:17px 0;font-size:10px;color:#7c8d7c}.weekly-row small{display:block;color:#a1aa9b;font-size:9px;margin-top:4px}.weekly-track{background:#f0f3ea;border-radius:5px;height:27px;overflow:hidden}.weekly-fill{height:100%;background:#98b391;border-radius:5px;min-width:0}.weekly-value{text-align:right;font-size:12px;color:#53734b}.table-scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:11px;white-space:nowrap}th{font-size:9px;text-align:left;color:#9aa495;font-weight:500;background:#f8faf4;padding:12px}td{padding:14px 12px;border-bottom:1px solid #edf0e7;color:#75816f}td button{border:0;background:none;padding:0;text-align:left;font-size:11px;color:var(--ink)}td .match-title{color:var(--orange)}.status-pill{font-size:8px;padding:4px 6px;border-radius:4px;background:#f1f3ed;color:#929e8a}.status-pill.done{background:#e9f0e6;color:#68825c}.cycle-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;margin-top:25px}.week-day{border:1px solid var(--line);border-radius:8px;padding:13px;display:flex;flex-direction:column;min-height:220px}.week-day.match-day{background:#fff8f3;border-color:#ecd8c9}.week-day h4{font-size:11px;margin:0 0 11px;text-transform:capitalize}.week-day h5{font-size:11px;line-height:1.5;font-weight:550;margin:12px 0 7px}.week-day p{font-size:9px;color:#8a9683;line-height:1.7;margin:0 0 14px}.week-day .text-button{margin-top:auto;font-size:9px;text-align:left}.week-day .cycle-badge{align-self:flex-start}.week-existing{font-size:9px;color:#a06f50;border-top:1px solid var(--line);padding-top:9px;margin-bottom:12px;line-height:1.8}.cycle-guide{margin-top:20px}.cycle-guide p{font-size:12px;line-height:1.9;color:#8d9989}.cycle-guide b{font-weight:550;color:#627a5a}.muted{font-size:12px;color:#8c9786;line-height:1.8}.card select{font-size:10px;max-width:190px}dialog{border:1px solid var(--line);border-radius:15px;padding:27px;width:min(560px,calc(100% - 30px));max-height:90vh;color:var(--ink);box-shadow:0 25px 100px #173c3530}dialog::backdrop{background:#14362e65;backdrop-filter:blur(3px)}.dialog-heading{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px}.dialog-heading h2{font-size:22px;font-weight:500;letter-spacing:-.7px;margin:8px 0 0}.close-button:not(.button){border:0;background:none;font-size:26px;color:#9aa793;padding:0 4px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.form-grid .full{grid-column:1/-1}label{font-size:11px;color:#7a8c75;display:block}input,select,textarea{width:100%;display:block;padding:10px 11px;border:1px solid #dfe6d8;border-radius:6px;background:#fff;color:var(--ink);margin-top:7px;font-size:12px;min-height:37px}input:focus,select:focus,textarea:focus{outline:2px solid #a7c697;outline-offset:1px}input:read-only{background:#f1f4ed;color:#87917f}input[type=file]{background:transparent;font-size:10px;max-width:100%}.optional{font-size:9px;color:#a1ac98;font-weight:400}.dialog-actions{display:flex;justify-content:flex-end;align-items:center;gap:10px;border-top:1px solid var(--line);padding-top:18px;margin-top:23px}.dialog-actions .button{padding:10px 13px}.dialog-actions .text-button{font-size:10px}.spacer{flex:1}.danger{color:#b16955}.form-error{font-size:11px;color:#b35e49;line-height:1.6;min-height:0}.upload-area{display:flex;align-items:center;flex-direction:column;border:1px dashed #becfb2;border-radius:10px;padding:28px 20px;background:#f8faf3;margin:22px 0;color:#86a175;gap:10px;cursor:pointer}.upload-area svg{width:27px;height:27px;margin-bottom:5px}.upload-area strong{font-size:13px;font-weight:500;color:#59754b}.upload-area>span,.upload-area small{font-size:10px;color:#8c9d80}.upload-area.dragging{background:#e9f0df;border-color:#7fa368}.zone-settings{margin-top:18px}#calculate-zones{font-size:10px;margin-top:10px}.toast{position:fixed;bottom:25px;left:calc(50% + 80px);transform:translateX(-50%);background:var(--green);color:#fff;padding:13px 20px;border-radius:8px;box-shadow:0 8px 30px #173c3530;font-size:12px;z-index:100}.error-banner{padding:12px 15px;background:#fff0e8;border:1px solid #eccdbc;border-radius:8px;color:#a96448;font-size:12px;margin-bottom:20px}#imported-detail{padding:13px;background:#eff4e9;border-radius:7px;font-size:10px;color:#758967;line-height:1.8;overflow-wrap:anywhere}.mini-zones{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}.mini-zones span{font-size:9px}[hidden]{display:none!important}@media(min-width:1450px){main{padding:46px 52px 25px}.calendar-layout{grid-template-columns:minmax(0,1fr) 270px}.day-cell{min-height:115px;padding:10px 8px}.day-slot{font-size:9px}.day-panel{padding:25px 21px}.calendar-topline{font-size:10px}.metrics{gap:20px}.metric{padding:22px 24px}.metric-label{font-size:12px}.metric>span{font-size:10px}}@media(max-width:1150px){.sidebar{width:190px;padding:27px 16px}.brand{font-size:30px}.brand-caption{font-size:8px;letter-spacing:1.5px}main{margin-left:190px;padding:28px 24px}.calendar-layout{grid-template-columns:minmax(0,1fr) 205px;gap:12px}.day-panel{padding:18px 13px}.metric{padding:16px 13px}.metric-label{font-size:10px}.metric>span{font-size:8px}.metric strong{font-size:25px}.calendar-hint{display:none!important}.calendar-topline{gap:11px;font-size:8px}.month-navigation{gap:7px}.month-navigation h2{font-size:17px;min-width:150px}.toolbar-actions{gap:10px}.week-day{padding:10px}.cycle-week{gap:7px}.day-cell{padding:6px 4px;min-height:96px}.day-slot{font-size:7px}.calendar-footer>span:last-child{display:none}.bottom-grid{grid-template-columns:1fr 1fr}.zone-row{grid-template-columns:20px 90px 1fr 50px;font-size:9px;gap:5px}.zone-value{font-size:9px}.page-header h1{font-size:28px}}@media(max-width:950px){.calendar-layout{grid-template-columns:1fr}.day-panel{display:grid;grid-template-columns:1fr 1fr;gap:0 25px}.day-panel>h3{grid-column:1}.day-panel>div.section-eyebrow{grid-column:1}.day-panel>#day-activities{grid-column:1;grid-row:3/5}.day-panel>.cycle-suggestion{grid-column:2;grid-row:1/4;margin-top:0}.next-match{grid-column:2;margin-top:12px}.day-cell{min-height:109px}.day-slot{font-size:9px}.cycle-week{grid-template-columns:repeat(4,1fr)}.page-header .button{font-size:10px;padding:10px}.page-header{align-items:flex-start}.eyebrow{font-size:8px;letter-spacing:1px}.analysis-grid{grid-template-columns:1fr}.analysis-grid .wide{grid-column:1}.metric-label svg{display:none}}@media(max-width:730px){.sidebar{position:static;width:100%;padding:16px 20px;display:block}.brand{font-size:28px}.brand-mark{width:29px;height:31px;font-size:30px;border-radius:8px}.brand-caption,.sidebar-rule,.nav-caption,.sidebar-bottom{display:none}.sidebar nav{display:flex;gap:8px;margin-top:17px}.nav-item{width:auto;flex:1;font-size:10px;gap:7px;padding:10px 8px;justify-content:center;margin:0}.nav-item svg{width:15px;height:15px}.nav-indicator{display:none}main{margin:0;padding:23px 16px}.page-header{margin-bottom:23px;flex-wrap:wrap;gap:15px}.page-header h1{font-size:27px}.page-header p{font-size:11px}.metrics{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}.metric{min-height:110px}.metric-label{font-size:10px}.metric>span{font-size:9px}.workspace-toolbar{flex-wrap:wrap;gap:14px;margin-bottom:17px}.month-navigation h2{font-size:17px;min-width:145px}.toolbar-actions{margin-left:auto}.calendar-topline{font-size:8px;padding:12px;gap:14px}.weekday-row{font-size:8px}.day-cell{min-height:94px;padding:5px 3px}.day-slot{font-size:7px;gap:2px;padding:4px 3px}.day-number{font-size:10px;width:21px;height:21px}.day-badge{font-size:6px}.day-top{padding:0;gap:0}.day-slot .done-check{display:none}.bottom-grid{grid-template-columns:1fr;gap:15px}.day-panel{gap:0 15px}.day-panel h3{font-size:15px}.card{padding:20px}.main-footer{gap:15px;align-items:center}.main-footer>span:last-child{max-width:130px;text-align:right;line-height:1.8}.cycle-week{grid-template-columns:repeat(2,1fr)}.week-day{min-height:185px;padding:14px}.toast{left:50%;max-width:90%;width:max-content;bottom:20px}.form-grid{gap:12px}.dialog-actions{flex-wrap:wrap}.dialog-actions .spacer{display:none}.dialog-actions .text-button{margin-right:auto}.card-heading .text-button{white-space:nowrap}.metrics .metric-label svg{display:block}#activity-filter{max-width:150px}.day-activity strong{font-size:10px}.activity-details{font-size:9px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}@media print{.sidebar,.page-header .button,.toolbar-actions,.day-panel,.main-footer,.view[hidden],dialog,.toast{display:none!important}main{margin:0;padding:0}.metrics{grid-template-columns:repeat(4,1fr)}.calendar-layout{display:block}.day-cell{min-height:95px}.calendar-panel{break-inside:avoid}.bottom-grid{break-inside:avoid}.button,.icon-button,.today-button{display:none}.card{break-inside:avoid}}
+
+.toolbar-actions{flex-wrap:wrap}.offline-note{display:flex;gap:10px;align-items:center;justify-content:space-between;background:#eaf0e7;border:1px solid #dce5d6;border-radius:8px;padding:12px 16px;margin-bottom:22px;font-size:11px;color:#68815e}.backup-buttons{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.backup-buttons>label{cursor:pointer}.backup-buttons input{max-width:100%}@media(max-width:730px){.offline-note{font-size:10px;line-height:1.7;align-items:flex-start}.toolbar-actions{gap:12px}}
+</style>
+</head>
+<body>
+<svg class="icon-defs" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs>
+ <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18m-13 5h2m4 0h2"/></symbol>
+ <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 4v16h17M8 16v-5m5 5V6m5 10v-7"/></symbol>
+ <symbol id="i-cycle" viewBox="0 0 24 24"><path d="M4 9a8 8 0 0 1 13-4l3 3m0-5v5h-5M20 15a8 8 0 0 1-13 4l-3-3m0 5v-5h5"/></symbol>
+ <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M4 15v5h16v-5"/></symbol>
+ <symbol id="i-arrow" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+ <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+ <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20 5c-3-3-6-1-8 1-2-2-5-4-8-1-4 4 1 9 8 15 7-6 12-11 8-15Z"/></symbol>
+ <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/></symbol>
+ <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+</defs></svg>
+<aside class="sidebar">
+ <a class="brand" href="#"><span class="brand-mark">f<span>·</span></span><span>forma<span class="brand-dot">.</span></span></a>
+ <p class="brand-caption">TWÓJ DZIENNIK SĘDZIEGO</p>
+ <div class="sidebar-rule"></div><p class="nav-caption">TWOJA PRZESTRZEŃ</p>
+ <nav aria-label="Nawigacja główna">
+  <button class="nav-item active" data-view="calendar"><svg><use href="#i-calendar"/></svg>Kalendarz<span class="nav-indicator"></span></button>
+  <button class="nav-item" data-view="analysis"><svg><use href="#i-chart"/></svg>Analiza treningów</button>
+  <button class="nav-item" data-view="cycles"><svg><use href="#i-cycle"/></svg>Mikrocykle</button>
+ </nav>
+ <div class="sidebar-bottom"><div class="side-note"><span class="tiny-label">MAŁE KROKI. DOBRA FORMA.</span><p>Zaplanuj wysiłek.<br>Zostaw miejsce na regenerację.</p><div class="field-lines"><i></i><i></i><i></i></div></div>
+ <button id="settings-button" class="settings-button"><svg><use href="#i-settings"/></svg>Strefy tętna</button>
+ <div class="profile-dot"><span>S</span><div>Panel sędziego<small>Lokalny dziennik treningowy</small></div></div></div>
+</aside>
+<main>
+ <header class="page-header"><div><div class="eyebrow"><span class="status-dot"></span>PLANUJ ŚWIADOMIE · TRENUJ REGULARNIE</div><h1>Twój plan. Twój rytm.</h1><p>Treningi, mecze i regeneracja — wszystko w jednym miejscu.</p></div><button id="import-button" class="button secondary"><svg><use href="#i-upload"/></svg>Importuj z Garmina</button></header>
+ <div id="error-banner" class="error-banner" role="alert" hidden></div>
+<div class="offline-note"><span><b>Działa offline, bez instalacji.</b> Otwieraj ten sam plik w tej samej przeglądarce. Regularnie pobieraj kopię danych.</span><span>● Zapis lokalny</span></div>
+ <section class="metrics" aria-label="Podsumowanie miesiąca">
+  <article class="metric"><div class="metric-label">Wykonane aktywności <svg><use href="#i-check"/></svg></div><strong id="metric-count">—</strong><span id="metric-planned">W tym miesiącu</span></article>
+  <article class="metric"><div class="metric-label">Czas w ruchu <svg><use href="#i-clock"/></svg></div><strong id="metric-time">—</strong><span>Łączny czas wykonanych aktywności</span></article>
+  <article class="metric"><div class="metric-label">Pokonany dystans <svg><use href="#i-chart"/></svg></div><strong id="metric-distance">—</strong><span id="metric-matches">Treningi i mecze</span></article>
+  <article class="metric accent"><div class="metric-label">Obciążenie sRPE <svg><use href="#i-heart"/></svg></div><strong id="metric-load">—</strong><span id="metric-rpe">Czas w minutach × odczuwany wysiłek</span></article>
+ </section>
+ <div class="workspace-toolbar"><div class="month-navigation"><button id="prev-month" class="icon-button" aria-label="Poprzedni miesiąc"><svg class="reverse"><use href="#i-arrow"/></svg></button><h2 id="month-label">Kalendarz</h2><button id="next-month" class="icon-button" aria-label="Następny miesiąc"><svg><use href="#i-arrow"/></svg></button><button id="today-button" class="today-button">Dzisiaj</button></div><div class="toolbar-actions"><button id="backup-button" class="text-button">Kopia danych</button><a id="export-link" class="text-button" href="/api/export/">Eksport CSV ↗</a><button id="add-button" class="button primary">＋ Dodaj aktywność</button></div></div>
+ <section id="calendar-view" class="view">
+  <div class="calendar-layout"><div class="calendar-panel"><div class="calendar-topline"><span><span class="small-dot match-dot"></span>Mecz</span><span><span class="small-dot done-dot"></span>Wykonana</span><span><span class="small-dot planned-dot"></span>Zaplanowana</span><span class="calendar-hint">Dwie aktywności dziennie</span></div><div class="weekday-row"><span>PON</span><span>WT</span><span>ŚR</span><span>CZW</span><span>PT</span><span>SOB</span><span>ND</span></div><div id="calendar-grid" class="calendar-grid" aria-label="Kalendarz miesięczny"></div><div class="calendar-footer"><span class="small-dot today-dot"></span> Dzisiaj <span>Kliknij wolne miejsce, aby zaplanować aktywność.</span></div></div>
+   <aside class="day-panel"><div class="section-eyebrow">WYBRANY DZIEŃ</div><h3 id="selected-day-label">—</h3><div id="day-activities"></div><div id="day-cycle" class="cycle-suggestion"></div><div class="next-match"><span class="section-eyebrow">NAJBLIŻSZY MECZ</span><div id="next-match">Zaznacz termin meczu w kalendarzu.</div></div></aside>
+  </div>
+  <div class="bottom-grid"><article class="card"><div class="card-heading"><div><span class="section-eyebrow">INTENSYWNOŚĆ</span><h3>Gdzie pracowało Twoje serce?</h3></div><button class="text-button" data-view="analysis">Pełna analiza ↗</button></div><div id="zones-compact"></div></article><article class="card"><span class="section-eyebrow">RÓWNOWAGA TRENINGU</span><h3>Każdy bodziec ma znaczenie.</h3><div id="types-compact"></div></article></div>
+ </section>
+ <section id="analysis-view" class="view" hidden><div class="analysis-grid"><article class="card"><div class="card-heading"><div><span class="section-eyebrow">DANE Z POMIARU</span><h3>Czas w strefach tętna</h3></div><button class="text-button" id="analysis-settings">Edytuj strefy ↗</button></div><div id="zones-full"></div><p class="footnote">Czas liczony między próbkami TCX, osobno dla każdego odcinka. Przerwy powyżej 2 minut i brakujące próbki trafiają do „bez danych HR”.</p><div id="hr-overview" class="hr-overview"></div></article><article class="card"><span class="section-eyebrow">TYGODNIOWY RYTM</span><h3>Obciążenie i objętość</h3><div id="weekly-chart"></div><p class="footnote">sRPE = czas w minutach × RPE (1–10). Podsumowanie obejmuje wykonane aktywności w wybranym miesiącu; tygodnie na jego granicach są częściowe.</p></article><article class="card wide"><span class="section-eyebrow">RODZAJE AKTYWNOŚCI</span><h3>Jak rozkładał się Twój trening?</h3><div id="types-full"></div></article><article class="card wide"><div class="card-heading"><div><span class="section-eyebrow">DZIENNIK</span><h3>Szczegóły aktywności</h3></div><select id="activity-filter" aria-label="Filtr aktywności"><option value="all">Wszystkie aktywności</option><option value="done">Wykonane</option><option value="planned">Zaplanowane</option><option value="matches">Mecze</option></select></div><div class="table-scroll"><table><thead><tr><th>Data</th><th>Aktywność</th><th>Status</th><th>Czas</th><th>Dystans</th><th>Śr. / max HR</th><th>Moc śr.</th><th>RPE</th><th>sRPE</th></tr></thead><tbody id="activity-table"></tbody></table></div></article></div></section>
+ <section id="cycles-view" class="view" hidden><article class="card"><div class="card-heading"><div><span class="section-eyebrow">MIKROCYKL MECZOWY</span><h3>Zbuduj tydzień wokół meczu.</h3></div><input id="cycle-date" type="date" aria-label="Wybierz dzień mikrocyklu"></div><p class="muted">MD oznacza dzień meczu. Propozycje uwzględniają mecze przed i po wybranym dniu, także na granicach miesięcy. Dopasuj je do swojej regeneracji i planu.</p><div id="cycle-week" class="cycle-week"></div></article><article class="card cycle-guide"><h3>Rytm, który możesz dostosować</h3><p><b>Po meczu:</b> regeneracja i stopniowy powrót. <b>3 dni przed:</b> miejsce na bodziec jakościowy. <b>2 dni przed:</b> mniejsza objętość. <b>W przeddzień:</b> krótka aktywacja. Gdy mecze są blisko siebie, pierwszeństwo ma odbudowa po ostatnim.</p></article></section>
+ <footer class="main-footer"><span>forma. <span>Przestrzeń na dobrą formę.</span></span><span>Dane zapisują się w tej przeglądarce.</span></footer>
+</main>
+<dialog id="activity-dialog"><form id="activity-form"><div class="dialog-heading"><div><span class="section-eyebrow">TWÓJ DZIENNIK</span><h2 id="activity-dialog-title">Dodaj aktywność</h2></div><button type="button" class="close-button" aria-label="Zamknij">×</button></div><input name="id" type="hidden"><div class="form-grid"><label>Data<input name="date" type="date" required></label><label>Miejsce w dniu<select name="slot"><option value="1">Aktywność 1</option><option value="2">Aktywność 2</option></select></label><label class="full">Rodzaj aktywności<select name="kind" id="activity-kind"></select></label><label class="full">Nazwa <span class="optional">opcjonalnie</span><input name="title" maxlength="160" placeholder="Np. bieg tlenowy w parku"></label><label>Status<select name="status"><option value="planned">Zaplanowana</option><option value="done">Wykonana</option></select></label><label>Odczuwany wysiłek · RPE<input name="rpe" type="number" min="1" max="10" step="1" placeholder="1–10 lub zostaw puste"></label><label>Czas · min<input name="duration_minutes" type="number" min="0" max="1440" step="0.01" value="0" required></label><label>Dystans · km<input name="distance_km" type="number" min="0" max="1000" step="0.001" value="0" required></label><label>Średnie tętno · bpm<input name="avg_hr" type="number" min="20" max="250" placeholder="Opcjonalnie"></label><label>Maksymalne tętno · bpm<input name="max_hr" type="number" min="20" max="250" placeholder="Opcjonalnie"></label><label class="full">Notatki<textarea name="notes" rows="3" maxlength="5000" placeholder="Samopoczucie, cel treningu, odcinki, warunki meczu…"></textarea></label></div><p class="footnote">RPE: 1–2 bardzo lekko · 3–4 lekko · 5–6 umiarkowanie · 7–8 ciężko · 9–10 bardzo ciężko. Ręczne wpisanie średniego tętna nie wyznacza czasu w strefach.</p><div id="imported-detail" hidden></div><p class="form-error" role="alert"></p><div class="dialog-actions"><button type="button" id="delete-activity" class="text-button danger" hidden>Usuń aktywność</button><button type="button" id="attach-tcx" class="text-button" hidden>Dołącz TCX</button><span class="spacer"></span><button type="button" class="button secondary close-button">Anuluj</button><button type="submit" class="button primary">Zapisz aktywność</button></div></form></dialog>
+<dialog id="import-dialog"><form id="import-form"><div class="dialog-heading"><div><span class="section-eyebrow">GARMIN · TCX</span><h2>Przenieś trening do dziennika.</h2></div><button type="button" class="close-button" aria-label="Zamknij">×</button></div><p class="muted">W Garmin Connect otwórz aktywność i wybierz „Eksportuj do TCX”. Wczytamy czas, dystans oraz próbki tętna.</p><input name="activity_id" type="hidden"><label class="upload-area"><svg><use href="#i-upload"/></svg><strong>Wybierz plik .tcx</strong><span>lub przeciągnij go tutaj · do 10 MB</span><input name="file" type="file" accept=".tcx,application/xml,text/xml" required><small id="upload-filename">Nie wybrano pliku</small></label><label>Data w kalendarzu <span class="optional">opcjonalnie</span><input name="date" type="date"></label><p id="import-date-hint" class="footnote">Pusta data oznacza datę z TCX w strefie Europe/Warsaw. Aktywność zajmie pierwsze wolne miejsce w tym dniu.</p><p class="form-error" role="alert"></p><div class="dialog-actions"><button type="button" class="button secondary close-button">Anuluj</button><button type="submit" class="button primary">Importuj aktywność</button></div></form></dialog>
+<dialog id="settings-dialog"><form id="settings-form"><div class="dialog-heading"><div><span class="section-eyebrow">USTAWIENIA ANALIZY</span><h2>Twoje strefy tętna.</h2></div><button type="button" class="close-button" aria-label="Zamknij">×</button></div><p class="muted">Wpisz wartości ustalone dla siebie lub przepisz granice z Garmina. Wpisane parametry: HRmax 199, LT 177, tętno spoczynkowe 57 i próg mocy 411 W. Domyślne strefy biegowe odnoszą się do LT.</p><div class="form-grid"><label>Tętno maksymalne · HRmax<input name="hr_max" type="number" min="80" max="250" required></label><label>Tętno progowe · LT<input name="hr_lthr" type="number" min="60" max="250" required></label><label>Tętno spoczynkowe<input name="hr_rest" type="number" min="25" max="150" required></label><label>Próg mocy · W<input name="threshold_power" type="number" min="1" max="2000" required></label><label class="full">Rodzaj mocy<select name="power_sport"><option value="running">Moc biegowa</option><option value="cycling">Moc rowerowa</option></select></label></div><button type="button" id="calculate-zones" class="text-button">Wylicz strefy biegu: 85 / 90 / 95 / 100% LT</button><div class="form-grid zone-settings"><label>Górna granica Z1<input name="z1" type="number" min="30" max="249" required></label><label>Górna granica Z2<input name="z2" type="number" min="30" max="249" required></label><label>Górna granica Z3<input name="z3" type="number" min="30" max="249" required></label><label>Górna granica Z4<input name="z4" type="number" min="30" max="249" required></label></div><p class="footnote">Metoda biegowa Joe Friela: Z1 &lt;85%, Z2 85–&lt;90%, Z3 90–&lt;95%, Z4 95–&lt;100%, Z5 ≥100% LT (połączone Z5a–c). <a href="https://www.trainingpeaks.com/blog/joe-friel-s-quick-guide-to-setting-zones/" target="_blank" rel="noopener noreferrer">Źródło: TrainingPeaks</a>. Granice dotyczą całkowitych wartości bpm. Z5 obejmuje tętno powyżej granicy Z4. Po zapisaniu przeliczymy podsumowania wszystkich importów z zachowanych próbek.</p><p class="form-error" role="alert"></p><div class="dialog-actions"><button type="button" class="button secondary close-button">Anuluj</button><button type="submit" class="button primary">Zapisz strefy</button></div></form></dialog>
+<div id="toast" class="toast" role="status" hidden></div>
+<dialog id="backup-dialog"><div class="dialog-heading"><div><span class="section-eyebrow">KALENDARZ I USTAWIENIA</span><h2>Twoje dane. Twoja kopia.</h2></div><button type="button" class="close-button" aria-label="Zamknij">×</button></div><p class="muted">Treningi są zapisywane w tej przeglądarce, na tym urządzeniu. Pobierz kopię przed zmianą przeglądarki, przeniesieniem pliku lub wyczyszczeniem danych przeglądania. Kopia zawiera także strefy i próbki HR.</p><div class="backup-buttons"><button type="button" id="download-backup" class="button primary">Pobierz kopię JSON</button><label>Przywróć kopię<input id="restore-backup" type="file" accept=".json,application/json"></label></div><p class="footnote">CSV służy do analizy w Excelu. Kopia JSON pozwala odtworzyć cały dziennik na innym komputerze. Przywrócenie zastępuje obecny kalendarz; zachowaj wcześniej jego kopię. Tryb prywatny przeglądarki może usuwać dane po zamknięciu okna.</p><p class="form-error" role="alert"></p></dialog>
+<script>
+/* Standalone storage and TCX analysis: all data stays in this browser. */
+(() => {
+  'use strict';
+  const KEY='forma.referee.v1';
+  const KINDS={endurance:'Bieg spokojny',intervals:'Interwały',speed:'Szybkość i sprinty',strength:'Siła',mobility:'Mobilność',recovery:'Regeneracja aktywna',cycling:'Rower',test:'Test sprawnościowy',match_iii:'Mecz · III liga',match_district:'Mecz · liga okręgowa',match_assistant:'Mecz · sędzia asystent',other:'Inna aktywność'};
+  const clone=value=>JSON.parse(JSON.stringify(value));
+  const isMatch=a=>a.kind.startsWith('match_');
+  const defaults=()=>({version:1,nextId:1,profile:{hr_max:199,hr_lthr:177,hr_rest:57,threshold_power:411,power_sport:'running',zone_limits:[150,159,168,176]},activities:[]});
+  const fail=message=>{throw new Error(message);};
+  const number=(value,label,min,max,integer=false,nullable=false)=>{
+    if(nullable&&(value===null||value===undefined||value==='')) return null;
+    if(value===null||value===undefined||value===''||typeof value==='boolean') fail('Uzupełnij: '+label+'.');
+    const n=Number(value);
+    if(!Number.isFinite(n)||n<min||n>max||(integer&&!Number.isInteger(n))) fail('Nieprawidłowa wartość: '+label+'.');
+    return n;
+  };
+  function validDate(key) {
+    if(typeof key!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(key)) fail('Nieprawidłowa data.');
+    const d=new Date(key+'T12:00:00Z');
+    if(!Number.isFinite(+d)||d.toISOString().slice(0,10)!==key||Number(key.slice(0,4))<1900) fail('Nieprawidłowa data.');
+    return key;
+  }
+  function shift(key,days) {
+    const d=new Date(key+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+days);return d.toISOString().slice(0,10);
+  }
+  function warsawDate(d=new Date()) {
+    const p=Object.fromEntries(new Intl.DateTimeFormat('en',{timeZone:'Europe/Warsaw',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(d).map(p=>[p.type,p.value]));
+    return `${p.year}-${p.month}-${p.day}`;
+  }
+  function validateProfile(values) {
+    if(!values||typeof values!=='object') fail('Nieprawidłowy profil.');
+    const hr_max=number(values.hr_max,'HRmax',80,250,true);
+    const hr_lthr=number(values.hr_lthr,'próg LT',60,hr_max,true);
+    const hr_rest=number(values.hr_rest,'tętno spoczynkowe',25,hr_lthr-1,true);
+    const threshold_power=number(values.threshold_power,'próg mocy',1,2000,true);
+    const power_sport=values.power_sport;
+    if(!['running','cycling'].includes(power_sport)) fail('Wybierz rodzaj mocy.');
+    if(!Array.isArray(values.zone_limits)||values.zone_limits.length!==4) fail('Podaj cztery granice stref.');
+    const zone_limits=values.zone_limits.map(v=>number(v,'granice stref',30,249,true));
+    if(zone_limits.some((v,i)=>i&&v<=zone_limits[i-1])||zone_limits[3]>=hr_max) fail('Granice stref muszą rosnąć i być poniżej HRmax.');
+    return {hr_max,hr_lthr,hr_rest,threshold_power,power_sport,zone_limits};
+  }
+  function validateActivity(values,original=null) {
+    if(!values||typeof values!=='object'||Array.isArray(values)) fail('Nieprawidłowe dane aktywności.');
+    const activity={...original,date:validDate(values.date),slot:number(values.slot,'miejsce w dniu',1,2,true),kind:values.kind,status:values.status,
+      title:String(values.title??'').trim().slice(0,160),notes:String(values.notes??'').trim().slice(0,5000),
+      duration_seconds:number(values.duration_minutes,'czas (0–1440 min)',0,1440)*60,distance_km:number(values.distance_km,'dystans',0,1000),
+      avg_hr:number(values.avg_hr,'średnie tętno',20,250,true,true),max_hr:number(values.max_hr,'maksymalne tętno',20,250,true,true),rpe:number(values.rpe,'RPE (1–10)',1,10,true,true)};
+    if(!Object.hasOwn(KINDS,activity.kind)||!['planned','done'].includes(activity.status)) fail('Nieprawidłowy rodzaj lub status aktywności.');
+    if(activity.avg_hr&&activity.max_hr&&activity.avg_hr>activity.max_hr) fail('Średnie tętno nie może przekraczać maksymalnego.');
+    if(activity.status==='done'&&!activity.duration_seconds) fail('Podaj czas wykonanej aktywności.');
+    if(original?.source==='tcx') {
+      if(Math.abs(activity.duration_seconds-original.duration_seconds)>.5||Math.abs(activity.distance_km-original.distance_km)>.001) fail('Czas i dystans pochodzą z TCX. Zaimportuj poprawiony plik, aby je zmienić.');
+      activity.duration_seconds=original.duration_seconds;activity.distance_km=original.distance_km;
+      activity.avg_hr=original.avg_hr;activity.max_hr=original.max_hr;
+    }
+    return activity;
+  }
+  function validateDatabase(raw) {
+    if(!raw||raw.version!==1||!Array.isArray(raw.activities)||raw.activities.length>20000) fail('Nieprawidłowa lub nieobsługiwana kopia danych Forma.');
+    const profile=validateProfile(raw.profile), ids=new Set(),slots=new Set();
+    const activities=raw.activities.map(item=>{
+      const a=validateActivity({...item,duration_minutes:item.duration_seconds/60});
+      a.id=number(item.id,'identyfikator aktywności',1,Number.MAX_SAFE_INTEGER-1,true);
+      if(ids.has(a.id)||slots.has(`${a.date}:${a.slot}`)) fail('Kopia zawiera powtórzone aktywności lub zajęte miejsca.');
+      ids.add(a.id);slots.add(`${a.date}:${a.slot}`);
+      if(!['manual','tcx'].includes(item.source)) fail('Nieprawidłowe źródło aktywności w kopii.');
+      a.source=item.source;a.imported_filename=String(item.imported_filename??'').slice(0,200);
+      a.avg_power=number(item.avg_power,'średnia moc',0,5000,true,true);a.max_power=number(item.max_power,'maksymalna moc',0,5000,true,true);
+      if(!Array.isArray(item.hr_segments)||item.hr_segments.length>1000) fail('Nieprawidłowe próbki HR w kopii.');
+      a.hr_segments=item.hr_segments.map(s=>{
+        if(!Array.isArray(s)||s.length!==2) fail('Nieprawidłowa próbka HR.');
+        return [number(s[0],'tętno próbki',20,250,true),number(s[1],'czas próbki',0,86400)];
+      });
+      if(a.hr_segments.reduce((sum,s)=>sum+s[1],0)>a.duration_seconds+1) fail('Czas próbek HR przekracza czas aktywności.');
+      if(a.source==='manual'&&a.hr_segments.length) fail('Ręczna aktywność zawiera nieprawidłowe próbki.');
+      return a;
+    });
+    return {version:1,profile,activities,nextId:Math.max(0,...ids)+1};
+  }
+  function readDatabase() {
+    let raw;
+    try {raw=localStorage.getItem(KEY);}catch {fail('Przeglądarka blokuje lokalny zapis. Otwórz plik w zwykłym oknie Chrome, Edge lub Firefox i zezwól na zapis danych.');}
+    if(raw===null) return defaults();
+    try{return validateDatabase(JSON.parse(raw));}catch {fail('Zapisane dane są uszkodzone. Niczego nie nadpisano. Użyj „Kopia danych”, aby pobrać zapis lub przywrócić poprawną kopię.');}
+  }
+  function persist(state) {
+    try{localStorage.setItem(KEY,JSON.stringify(state));}catch{fail('Nie udało się zapisać danych w przeglądarce. Zrób kopię danych i sprawdź wolne miejsce oraz ustawienia zapisu.');}
+  }
+  function zones(a,limits) {
+    const result=[0,0,0,0,0];for(const [hr,seconds] of a.hr_segments) result[limits.filter(n=>hr>n).length]+=seconds;return result;
+  }
+  function serialize(a,profile) {
+    const times=zones(a,profile.zone_limits);
+    return {...a,kind_label:KINDS[a.kind],duration_minutes:Math.round(a.duration_seconds/60*100)/100,zones_seconds:times,unknown_hr_seconds:Math.max(0,a.duration_seconds-times.reduce((x,y)=>x+y,0)),load:a.rpe?Math.round(a.duration_seconds/60*a.rpe):null,is_match:isMatch(a)};
+  }
+  function summary(activities,profile) {
+    const done=activities.filter(a=>a.status==='done'),types=new Map(),weeks=new Map(),times=[0,0,0,0,0];let weighted=0,covered=0;
+    for(const a of done) {
+      zones(a,profile.zone_limits).forEach((s,i)=>times[i]+=s);
+      const type=types.get(a.kind)||{kind:a.kind,label:KINDS[a.kind],count:0,minutes:0};type.count++;type.minutes+=a.duration_seconds/60;types.set(a.kind,type);
+      const date=new Date(a.date+'T12:00:00Z'),key=shift(a.date,-(date.getUTCDay()+6)%7);
+      const week=weeks.get(key)||{date:key,load:0,minutes:0,count:0,unrated:0};week.minutes+=a.duration_seconds/60;week.count++;if(a.rpe)week.load+=a.duration_seconds/60*a.rpe;else week.unrated++;weeks.set(key,week);
+      for(const [hr,seconds] of a.hr_segments){weighted+=hr*seconds;covered+=seconds;}
+    }
+    const total=done.reduce((sum,a)=>sum+a.duration_seconds,0);
+    return {completed:done.length,planned:activities.filter(a=>a.status==='planned').length,matches:done.filter(isMatch).length,minutes:Math.round(total/60*10)/10,distance_km:Math.round(done.reduce((s,a)=>s+a.distance_km,0)*100)/100,load:Math.round(done.reduce((s,a)=>s+(a.rpe?a.duration_seconds/60*a.rpe:0),0)),unrated:done.filter(a=>!a.rpe).length,avg_hr:covered?roundEven(weighted/covered):null,max_hr:done.reduce((max,a)=>a.max_hr?Math.max(max||0,a.max_hr):max,null),zones_seconds:times,unknown_hr_seconds:Math.max(0,total-times.reduce((x,y)=>x+y,0)),types:[...types.values()],weeks:[...weeks.values()].sort((a,b)=>a.date.localeCompare(b.date))};
+  }
+  function microcycle(day,matches) {
+    const dates=[...new Set(matches.map(a=>a.date))].sort();
+    if(dates.includes(day)) return {badge:'MD',label:'Dzień meczowy',kind:'mobility',minutes:15,rpe:2,description:'Rozgrzewka przed meczem; po meczu spokojne schłodzenie. Bez dodatkowego ciężkiego treningu.'};
+    const prev=dates.filter(d=>d<day).at(-1),next=dates.find(d=>d>day);
+    const since=prev?(new Date(day)-new Date(prev))/86400000:null,until=next?(new Date(next)-new Date(day))/86400000:null;
+    if(since===1)return {badge:'MD+1',label:'Odbudowa po meczu',kind:'recovery',minutes:25,rpe:2,description:'Lekki ruch i mobilność. Dostosuj czas do zmęczenia i obciążenia meczu.'};
+    if(until===1)return {badge:'MD−1',label:'Aktywacja przed meczem',kind:'speed',minutes:20,rpe:3,description:'Krótka aktywacja i kilka swobodnych przyspieszeń, z pełnym odpoczynkiem.'};
+    if(since===2)return {badge:'MD+2',label:'Spokojny powrót',kind:'endurance',minutes:30,rpe:3,description:'Spokojny wysiłek tlenowy. Przy utrzymującym się zmęczeniu wybierz regenerację.'};
+    if(until===2)return {badge:'MD−2',label:'Zmniejszenie objętości',kind:'endurance',minutes:30,rpe:3,description:'Lekki bieg i technika. Zostaw zapas energii na mecz.'};
+    if(until===3)return {badge:'MD−3',label:'Bodziec jakościowy',kind:'intervals',minutes:40,rpe:6,description:'Miejsce na interwały lub szybkość, jeśli jesteś zregenerowany. Uwzględnij rozgrzewkę i schłodzenie.'};
+    return {badge:'BAZA',label:'Dzień budowania formy',kind:'endurance',minutes:40,rpe:4,description:'Trening tlenowy lub siła według Twojego planu. Wybierz odpoczynek, jeśli go potrzebujesz.'};
+  }
+  function stateForMonth(db,month) {
+    if(!/^\d{4}-\d{2}$/.test(month)) fail('Nieprawidłowy miesiąc.');
+    const first=validDate(month+'-01'),activities=db.activities.filter(a=>a.date.startsWith(month)).sort((a,b)=>a.date.localeCompare(b.date)||a.slot-b.slot);
+    const matches=db.activities.filter(isMatch),cycles={};
+    for(let key=first;key.startsWith(month);key=shift(key,1)) cycles[key]=microcycle(key,matches);
+    const next=matches.filter(a=>a.date>=warsawDate()).sort((a,b)=>a.date.localeCompare(b.date)||a.slot-b.slot)[0];
+    return {activities:activities.map(a=>serialize(a,db.profile)),summary:summary(activities,db.profile),profile:clone(db.profile),kinds:KINDS,next_match:next?serialize(next,db.profile):null,microcycles:cycles};
+  }
+  const children=(node,name)=>[...node.children].filter(n=>n.localName===name);
+  const descendants=(node,name)=>[...node.getElementsByTagName('*')].filter(n=>n.localName===name);
+  function xmlNumber(node,name) {
+    const found=node.localName===name?node:descendants(node,name)[0];if(!found?.textContent.trim())return null;
+    const n=Number(found.textContent);return Number.isFinite(n)&&n>=0?n:null;
+  }
+  function xmlTime(value) {
+    if(typeof value!=='string'||!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$/.test(value.trim()))fail('Nieprawidłowy czas w TCX (wymagana strefa czasowa).');
+    validDate(value.trim().slice(0,10));const n=Date.parse(value.trim());if(!Number.isFinite(n))fail('Nieprawidłowy czas w TCX.');return n;
+  }
+  function roundEven(n){const floor=Math.floor(n);return n-floor===.5?floor+(floor%2):Math.round(n);}
+  function parseTCX(text) {
+    if(!text||/<!DOCTYPE|<!ENTITY/i.test(text))fail('Nieprawidłowy lub niedozwolony plik XML/TCX.');
+    const xml=new DOMParser().parseFromString(text,'application/xml');
+    if(descendants(xml,'parsererror').length||xml.documentElement.localName!=='TrainingCenterDatabase')fail('To nie jest poprawny plik Garmin TCX.');
+    const activities=descendants(xml,'Activity');if(activities.length!==1)fail('Importuj plik TCX zawierający jedną aktywność.');
+    const a=activities[0],starts=[],timestamps=[],hearts=[],powers=[],durations=[],distances=[],samples=new Map();let fallback=0,powerWeighted=0,powerSeconds=0;
+    for(const lap of children(a,'Lap')) {
+      if(lap.getAttribute('StartTime'))starts.push(xmlTime(lap.getAttribute('StartTime')));
+      for(const [name,target] of [['TotalTimeSeconds',durations],['DistanceMeters',distances]])for(const node of children(lap,name)){const n=xmlNumber(node,name);if(n!==null)target.push(n);}
+      for(const track of children(lap,'Track')) {
+        let previous=null;
+        for(const point of children(track,'Trackpoint')) {
+          const t=children(point,'Time')[0],timestamp=t?xmlTime(t.textContent):null;
+          const hrNode=children(point,'HeartRateBpm')[0];let hr=hrNode?xmlNumber(hrNode,'Value'):null;
+          hr=hr!==null&&hr>=20&&hr<=250?roundEven(hr):null;
+          const distance=xmlNumber(point,'DistanceMeters');let power=xmlNumber(point,'Watts');if(power>5000)power=null;
+          if(timestamp!==null)timestamps.push(timestamp);if(hr)hearts.push(hr);if(power!==null)powers.push(power);
+          if(previous) {
+            if(timestamp!==null&&previous.timestamp!==null){const seconds=(timestamp-previous.timestamp)/1000;if(seconds>0&&seconds<=120){if(previous.hr)samples.set(previous.hr,(samples.get(previous.hr)||0)+seconds);if(previous.power!==null){powerWeighted+=previous.power*seconds;powerSeconds+=seconds;}}}
+            if(distance!==null&&previous.distance!==null)fallback+=Math.max(0,distance-previous.distance);
+          }
+          previous={timestamp,hr,distance,power};
+        }
+      }
+    }
+    if(!starts.length&&!timestamps.length){const id=children(a,'Id')[0];if(id)starts.push(xmlTime(id.textContent));}
+    const times=[...starts,...timestamps];if(!times.length)fail('Plik nie zawiera daty aktywności.');
+    const earliest=times.reduce((min,v)=>Math.min(min,v),Infinity),latest=times.reduce((max,v)=>Math.max(max,v),-Infinity);
+    const duration=durations.length?durations.reduce((x,y)=>x+y,0):(latest-earliest)/1000;
+    if(!Number.isFinite(duration)||duration<=0||duration>86400)fail('Brak poprawnego czasu aktywności (maksymalnie 24 godziny).');
+    let covered=[...samples.values()].reduce((x,y)=>x+y,0);if(covered>duration){for(const [hr,s]of samples)samples.set(hr,s*duration/covered);covered=duration;}
+    let avg_hr=covered?roundEven([...samples].reduce((sum,[hr,s])=>sum+hr*s,0)/covered):null;
+    if(avg_hr===null)for(const node of descendants(a,'AverageHeartRateBpm')){const n=xmlNumber(node,'Value');if(n!==null&&n>=20&&n<=250){avg_hr=roundEven(n);break;}}
+    let max_hr=hearts.length?hearts.reduce((max,v)=>Math.max(max,v),0):null;
+    if(max_hr===null)for(const node of descendants(a,'MaximumHeartRateBpm')){const n=xmlNumber(node,'Value');if(n!==null&&n>=20&&n<=250)max_hr=Math.max(max_hr||0,roundEven(n));}
+    const meters=distances.length?distances.reduce((x,y)=>x+y,0):fallback;if(!Number.isFinite(meters)||meters>1000000)fail('Nieprawidłowy dystans w TCX.');
+    return {date:warsawDate(new Date(earliest)),kind:a.getAttribute('Sport')==='Biking'?'cycling':'endurance',duration_seconds:Math.round(duration*100)/100,distance_km:Math.round(meters)/1000,avg_hr,max_hr,avg_power:powerSeconds?roundEven(powerWeighted/powerSeconds):null,max_power:powers.length?roundEven(powers.reduce((max,v)=>Math.max(max,v),0)):null,hr_segments:[...samples].sort((a,b)=>a[0]-b[0]).map(([hr,s])=>[hr,Math.round(s*1000)/1000])};
+  }
+  function freeSlot(db,date,id=null,slot=null) {
+    const occupied=db.activities.filter(a=>a.date===date&&a.id!==id).map(a=>a.slot);
+    if(slot!==null){if(occupied.includes(slot))fail('To miejsce jest już zajęte. Każdy dzień ma dwie aktywności.');return slot;}
+    return [1,2].find(s=>!occupied.includes(s))||fail('Ten dzień ma już dwie aktywności. Otwórz istniejącą aktywność i wybierz „Dołącz TCX”.');
+  }
+  async function request(url,options={}) {
+    const parsed=new URL(url,'https://forma.invalid'),method=options.method||'GET';
+    if(parsed.pathname==='/api/import/'&&method==='POST') {
+      const form=options.body,file=form.get('file');if(!(file instanceof File)||!file.size||file.size>10*1024*1024)fail('Wybierz plik TCX do 10 MB.');
+      const values=parseTCX(await file.text()),db=readDatabase(),id=form.get('activity_id');let activity;
+      if(id){activity=db.activities.find(a=>a.id===Number(id));if(!activity)fail('Nie znaleziono aktywności.');delete values.kind;delete values.date;Object.assign(activity,values);}
+      else {if(form.get('date'))values.date=validDate(form.get('date'));activity={...values,id:db.nextId++,slot:freeSlot(db,values.date),title:'',notes:'',rpe:null};db.activities.push(activity);}
+      activity.source='tcx';activity.status='done';activity.imported_filename=file.name.slice(0,200);persist(db);return serialize(activity,db.profile);
+    }
+    const db=readDatabase();
+    if(parsed.pathname==='/api/state/'&&method==='GET')return stateForMonth(db,parsed.searchParams.get('month')||warsawDate().slice(0,7));
+    if(parsed.pathname==='/api/profile/'&&method==='POST'){db.profile=validateProfile(JSON.parse(options.body));persist(db);return {saved:true};}
+    const detail=parsed.pathname.match(/^\/api\/activities\/(\d+)\/$/);
+    if(detail){const id=Number(detail[1]),index=db.activities.findIndex(a=>a.id===id);if(index<0)fail('Nie znaleziono aktywności.');if(method==='DELETE'){db.activities.splice(index,1);persist(db);return {deleted:true};}if(method==='POST'){const a=validateActivity(JSON.parse(options.body),db.activities[index]);freeSlot(db,a.date,id,a.slot);db.activities[index]=a;persist(db);return serialize(a,db.profile);}}
+    if(parsed.pathname==='/api/activities/'&&method==='POST'){const a=validateActivity(JSON.parse(options.body));freeSlot(db,a.date,null,a.slot);Object.assign(a,{id:db.nextId++,source:'manual',hr_segments:[],imported_filename:'',avg_power:null,max_power:null});db.activities.push(a);persist(db);return serialize(a,db.profile);}
+    fail('Nieobsługiwana operacja.');
+  }
+  function download(contents,filename,type) {
+    const blob=new Blob([contents],{type}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=filename;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
+  }
+  function csvForMonth(month) {
+    const db=readDatabase(),state=stateForMonth(db,month);
+    const row=values=>values.map(value=>{let s=value===null||value===undefined?'':typeof value==='number'?value.toLocaleString('pl-PL',{useGrouping:false,maximumFractionDigits:3}):String(value);if(/^\s*[=+\-@]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';}).join(';');
+    const lines=[row(['Data','Miejsce','Rodzaj','Nazwa','Status','Czas (min)','Dystans (km)','HR średnie','HR max','Moc średnia (W)','Moc max (W)','RPE','Obciążenie sRPE','Z1 (min)','Z2 (min)','Z3 (min)','Z4 (min)','Z5 (min)','Bez danych HR (min)','Notatki'])];
+    for(const a of state.activities)lines.push(row([a.date,a.slot,a.kind_label,a.title,a.status==='done'?'Wykonana':'Plan',a.duration_minutes,a.distance_km,a.avg_hr,a.max_hr,a.avg_power,a.max_power,a.rpe,a.load,...a.zones_seconds.map(s=>s/60),a.unknown_hr_seconds/60,a.notes]));
+    return '\ufeff'+lines.join('\r\n');
+  }
+  function installUI({load,notify,getMonth,today}) {
+    document.querySelector('#export-link').addEventListener('click',event=>{event.preventDefault();try{download(csvForMonth(getMonth()),`forma-${getMonth()}.csv`,'text/csv;charset=utf-8');}catch(error){notify(error.message);}});
+    const dialog=document.querySelector('#backup-dialog'),error=dialog.querySelector('.form-error');
+    document.querySelector('#backup-button').onclick=()=>{error.textContent='';dialog.showModal();};
+    document.querySelector('#download-backup').onclick=()=>{try{const raw=localStorage.getItem(KEY);const contents=raw??JSON.stringify(defaults());download(contents,`forma-kopia-${today}.json`,'application/json');notify('Kopia danych pobrana. Zachowaj ją w bezpiecznym miejscu.');}catch(e){error.textContent=e.message;}};
+    const input=document.querySelector('#restore-backup');
+    input.onchange=async()=>{
+      error.textContent='';const file=input.files[0];if(!file)return;
+      try{
+        if(file.size>20*1024*1024)fail('Kopia może mieć maksymalnie 20 MB.');
+        const incoming=validateDatabase(JSON.parse(await file.text()));
+        let existing;try{existing=readDatabase();}catch{existing={activities:[{}]};}
+        if(existing.activities.length&&!confirm(`Przywrócić kopię zawierającą ${incoming.activities.length} aktywności? Zastąpi ona obecny kalendarz i ustawienia. Jeśli potrzebujesz obecnych danych, najpierw pobierz ich kopię.`))return;
+        persist(incoming);await load();dialog.close();notify('Kopia przywrócona. Wybierz miesiąc, w którym zapisano aktywności.');
+      }catch(e){error.textContent=e instanceof SyntaxError?'To nie jest poprawny plik kopii JSON.':e.message;}finally{input.value='';}
+    };
+    window.addEventListener('storage',event=>{if(event.key===KEY)load();});
+  }
+  window.FormaLocal={request,installUI};
+})();
+
+</script>
+<script>
+'use strict';
+const $ = selector => document.querySelector(selector);
+const $$ = selector => [...document.querySelectorAll(selector)];
+const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dateKey = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const parseDate = s => new Date(Number(s.slice(0,4)), Number(s.slice(5,7))-1, Number(s.slice(8,10)), 12);
+const parts = Object.fromEntries(new Intl.DateTimeFormat('en', {timeZone:'Europe/Warsaw',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).filter(p=>p.type!=='literal').map(p=>[p.type,p.value]));
+const today = `${parts.year}-${parts.month}-${parts.day}`;
+let month = today.slice(0,7), selected = today, data = null, activeView = 'calendar';
+let loadGeneration = 0;
+const colors = ['#a7c9c7','#85b297','#d4bd67','#dc9264','#bc6570'];
+const zoneNames = ['Regeneracja','Wytrzymałość tlenowa','Tempo','Próg','Powyżej progu'];
+const num = (n, digits=0) => Number(n || 0).toLocaleString('pl-PL',{maximumFractionDigits:digits});
+const time = mins => mins >= 60 ? `${Math.floor(mins/60)} h ${Math.round(mins%60)} min` : `${num(mins,1)} min`;
+const shortDay = key => parseDate(key).toLocaleDateString('pl-PL',{day:'numeric',month:'short'});
+const activitiesOn = key => data.activities.filter(a=>a.date===key);
+const labelOf = a => a.title || a.kind_label;
+const icon = name => `<svg aria-hidden="true"><use href="#i-${name}"/></svg>`;
+
+function notify(message) {
+  $('#toast').textContent = message; $('#toast').hidden = false;
+  clearTimeout(notify.timer); notify.timer=setTimeout(()=>$('#toast').hidden=true,3500);
+}
+function csrf() { return document.cookie.split('; ').find(c=>c.startsWith('csrftoken='))?.split('=')[1] || ''; }
+async function request(url, options={}) {
+  if (window.FormaLocal) return window.FormaLocal.request(url, options);
+  const headers = {'X-CSRFToken':csrf(), ...options.headers};
+  if(options.body && !(options.body instanceof FormData)) headers['Content-Type']='application/json';
+  const response = await fetch(url,{...options,headers,credentials:'same-origin'});
+  const result = await response.json().catch(()=>({error:'Nieprawidłowa odpowiedź serwera.'}));
+  if(!response.ok) throw new Error(result.error || 'Nie udało się zapisać danych. Odśwież stronę i spróbuj ponownie.');
+  return result;
+}
+async function load() {
+  const generation = ++loadGeneration;
+  try {
+    const result = await request(`/api/state/?month=${month}`);
+    if(generation!==loadGeneration) return;
+    data=result; $('#error-banner').hidden=true; render();
+  } catch(error) {
+    if(generation!==loadGeneration) return;
+    $('#error-banner').textContent=error.message; $('#error-banner').hidden=false;
+  }
+}
+function render() {
+  $('#month-label').textContent=parseDate(month+'-01').toLocaleDateString('pl-PL',{month:'long',year:'numeric'});
+  $('#export-link').href=window.FormaLocal?'#':`/api/export/?month=${month}`;
+  $('#metric-count').textContent=data.summary.completed;
+  $('#metric-planned').textContent=`${data.summary.planned} ${data.summary.planned===1?'aktywność w planie':'aktywności w planie'}`;
+  $('#metric-time').textContent=time(data.summary.minutes);
+  $('#metric-distance').innerHTML=`${num(data.summary.distance_km,1)} <small>km</small>`;
+  $('#metric-matches').textContent=`${data.summary.matches} wykonanych meczów w tym miesiącu`;
+  $('#metric-load').innerHTML=`${num(data.summary.load)} <small>AU</small>`;
+  $('#metric-rpe').textContent=data.summary.unrated ? `${data.summary.unrated} wykonanych aktywności bez RPE` : 'Czas w minutach × odczuwany wysiłek';
+  $('#activity-kind').innerHTML=Object.entries(data.kinds).map(([key,value])=>`<option value="${key}">${esc(value)}</option>`).join('');
+  renderCalendar(); renderDay(); renderAnalysis(); renderCycles();
+}
+function renderCalendar() {
+  const first=parseDate(month+'-01'), offset=(first.getDay()+6)%7;
+  const days=new Date(first.getFullYear(),first.getMonth()+1,0).getDate();
+  const cells=Math.ceil((offset+days)/7)*7;
+  let html='';
+  for(let i=0;i<cells;i++) {
+    const day=new Date(first.getFullYear(),first.getMonth(),i-offset+1,12), key=dateKey(day), outside=key.slice(0,7)!==month;
+    const entries=activitiesOn(key), isMatch=entries.some(a=>a.is_match);
+    html+=`<div class="day-cell ${outside?'outside':''} ${selected===key?'selected':''} ${isMatch?'match-day':''}"><div class="day-top"><button class="day-number ${key===today?'today':''}" ${outside?'disabled':''} data-day="${key}" aria-label="Wybierz ${key}">${day.getDate()}</button>${isMatch?'<span class="day-badge">MECZ</span>':''}</div>`;
+    if(!outside) for(let slot=1;slot<=2;slot++) {
+      const activity=entries.find(a=>a.slot===slot);
+      if(activity) html+=`<button class="day-slot ${activity.is_match?'match':activity.status}" data-edit="${activity.id}" aria-label="${esc(labelOf(activity))}, ${key}, ${activity.status==='done'?'wykonana':'zaplanowana'}">${activity.status==='done'?'<svg class="done-check"><use href="#i-check"/></svg>':'<span class="small-dot '+(activity.is_match?'match-dot':'planned-dot')+'"></span>'}<span class="slot-title">${esc(labelOf(activity))}</span></button>`;
+      else html+=`<button class="day-slot empty" data-new-date="${key}" data-new-slot="${slot}" aria-label="Dodaj aktywność ${slot} dnia ${key}">＋</button>`;
+    }
+    html+='</div>';
+  }
+  $('#calendar-grid').innerHTML=html;
+}
+function renderDay() {
+  $('#selected-day-label').textContent=parseDate(selected).toLocaleDateString('pl-PL',{weekday:'long',day:'numeric',month:'long'});
+  const entries=activitiesOn(selected);
+  $('#day-activities').innerHTML=[1,2].map(slot=>{
+    const a=entries.find(a=>a.slot===slot);
+    return `<div class="day-activity"><div class="activity-kicker"><span>AKTYWNOŚĆ ${slot}</span>${a?`<span>${a.status==='done'?'WYKONANA':'PLAN'}</span>`:''}</div>${a?`<button data-edit="${a.id}"><strong>${esc(labelOf(a))}</strong><div class="activity-details">${esc(a.kind_label)}<br>${time(a.duration_minutes)}${a.distance_km?` · ${num(a.distance_km,2)} km`:''}${a.rpe?` · RPE ${a.rpe}`:''}${a.source==='tcx'?'<br>↳ Dane z Garmina':''}</div></button>`:`<button class="day-add" data-new-date="${selected}" data-new-slot="${slot}">＋ Zaplanuj aktywność</button>`}</div>`;
+  }).join('');
+  const cycle=data.microcycles[selected];
+  $('#day-cycle').innerHTML=cycle?`<span class="cycle-badge">${cycle.badge}</span><h4>${cycle.label}</h4><p>${cycle.description}</p><button class="text-button" data-suggestion="${selected}">Dodaj propozycję do planu ↗</button>`:'';
+  const match=data.next_match;
+  $('#next-match').innerHTML=match?`<strong>${esc(match.kind_label)}</strong>${parseDate(match.date).toLocaleDateString('pl-PL',{weekday:'long',day:'numeric',month:'long'})}${match.title?`<br>${esc(match.title)}`:''}`:'Zaznacz termin meczu w kalendarzu.';
+}
+function zoneMarkup(compact=false) {
+  const zones=data.summary.zones_seconds, known=zones.reduce((a,b)=>a+b,0), limits=data.profile.zone_limits;
+  if(!known) return '<div class="empty-state">Tu zobaczysz czas spędzony w każdej strefie.<br>Zaimportuj TCX z próbkami tętna, aby rozpocząć analizę.</div>';
+  let html=`<div class="zone-stack">${zones.map((seconds,i)=>`<div style="width:${seconds/known*100}%;background:${colors[i]}" title="Z${i+1}: ${time(seconds/60)}"></div>`).join('')}</div>`;
+  for(let i=0;i<5;i++) {
+    const range=i===0?`≤ ${limits[0]} bpm`:i===4?`≥ ${limits[3]+1} bpm`:`${limits[i-1]+1}–${limits[i]} bpm`;
+    html+=`<div class="zone-row"><span class="zone-label" style="color:${colors[i]}">Z${i+1}</span><span title="${zoneNames[i]}">${compact?range:zoneNames[i]+' · '+range}</span><div class="zone-track"><div class="zone-fill" style="width:${zones[i]/known*100}%;background:${colors[i]}"></div></div><span class="zone-value">${num(zones[i]/60,1)} min</span></div>`;
+  }
+  return html+`<div class="zone-nodata">${time(known/60)} z pomiarem HR · ${time(data.summary.unknown_hr_seconds/60)} bez danych HR<br>Strefy biegu względem LT ${data.profile.hr_lthr} bpm. Proporcje dotyczą czasu z pomiarem.</div>`;
+}
+function typesMarkup(compact=false) {
+  const types=[...data.summary.types].sort((a,b)=>b.minutes-a.minutes);
+  if(!types.length) return '<div class="empty-state">Zacznij od pierwszego treningu lub meczu.<br>Wykonane aktywności utworzą Twój profil treningu.</div>';
+  const visible=compact?types.slice(0,4):types;
+  return visible.map(t=>`<div class="type-row"><span class="type-label"><span class="type-mark" style="background:${t.kind.startsWith('match')?'#c57955':'#98b391'}"></span>${esc(t.label)}</span><span>${t.count} ×</span><strong>${time(t.minutes)}</strong></div>`).join('')+(compact&&types.length>4?`<p class="footnote">+ ${types.length-4} rodzajów w pełnej analizie</p>`:'');
+}
+function renderAnalysis() {
+  $('#zones-compact').innerHTML=zoneMarkup(true); $('#zones-full').innerHTML=zoneMarkup();
+  $('#types-compact').innerHTML=typesMarkup(true); $('#types-full').innerHTML=typesMarkup();
+  $('#hr-overview').innerHTML=`<div><strong>${data.summary.avg_hr??'—'}</strong>Średnie HR · średnia ważona czasem próbek</div><div><strong>${data.summary.max_hr??'—'}</strong>Maksymalne HR · bpm</div>`;
+  const weeks=data.summary.weeks, maximum=Math.max(...weeks.map(w=>w.load),1);
+  $('#weekly-chart').innerHTML=weeks.length?weeks.map(w=>`<div class="weekly-row"><span>Od ${shortDay(w.date)}<small>${time(w.minutes)}</small></span><div class="weekly-track"><div class="weekly-fill" style="width:${w.load/maximum*100}%"></div></div><span class="weekly-value">${num(w.load)}<small>AU${w.unrated?` · ${w.unrated} bez RPE`:''}</small></span></div>`).join(''):'<div class="empty-state">Obciążenie pojawi się po zapisaniu wykonanych aktywności z oceną RPE.</div>';
+  renderTable();
+}
+function renderTable() {
+  const filter=$('#activity-filter').value;
+  const activities=data.activities.filter(a=>filter==='all'||(filter==='matches'?a.is_match:a.status===filter));
+  $('#activity-table').innerHTML=activities.length?activities.map(a=>`<tr><td>${shortDay(a.date)}<br><small>#${a.slot}</small></td><td><button class="${a.is_match?'match-title':''}" data-edit="${a.id}">${esc(labelOf(a))}</button><br><small>${esc(a.kind_label)}${a.source==='tcx'?' · TCX':''}</small></td><td><span class="status-pill ${a.status}">${a.status==='done'?'Wykonana':'Plan'}</span></td><td>${time(a.duration_minutes)}</td><td>${a.distance_km?num(a.distance_km,2)+' km':'—'}</td><td>${a.avg_hr??'—'} / ${a.max_hr??'—'}</td><td>${a.avg_power?num(a.avg_power)+' W':'—'}</td><td>${a.rpe??'—'}</td><td>${a.load??'—'}</td></tr>`).join(''):'<tr><td colspan="9" class="empty-state">Brak aktywności dla wybranego filtra.</td></tr>';
+}
+function renderCycles() {
+  $('#cycle-date').value=selected;
+  const start=parseDate(selected); start.setDate(start.getDate()-(start.getDay()+6)%7);
+  $('#cycle-week').innerHTML=Array.from({length:7},(_,i)=>{
+    const date=new Date(start); date.setDate(start.getDate()+i); const key=dateKey(date), cycle=data.microcycles[key];
+    if(!cycle) return `<div class="week-day"><h4>${shortDay(key)}</h4><p>Poza wybranym miesiącem.</p><button class="text-button" data-go-date="${key}">Otwórz ten dzień ↗</button></div>`;
+    const entries=activitiesOn(key), isMatch=entries.some(a=>a.is_match);
+    return `<div class="week-day ${isMatch?'match-day':''}"><h4>${date.toLocaleDateString('pl-PL',{weekday:'short',day:'numeric',month:'short'})}</h4><span class="cycle-badge">${cycle.badge}</span><h5>${cycle.label}</h5><p>${cycle.description}</p>${entries.length?`<div class="week-existing">${entries.map(a=>esc(labelOf(a))).join('<br>')}</div>`:''}<button class="text-button" data-suggestion="${key}">${cycle.minutes} min · RPE ${cycle.rpe}<br>＋ Dopasuj i dodaj</button></div>`;
+  }).join('');
+}
+function showView(view) {
+  activeView=view;
+  for(const key of ['calendar','analysis','cycles']) $(`#${key}-view`).hidden=key!==view;
+  $$('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
+}
+function openActivity(activity=null, day=selected, slot=null, suggestion=null) {
+  if(!data) return;
+  const form=$('#activity-form'); form.reset();
+  form.querySelector('.form-error').textContent='';
+  const entries=activitiesOn(day);
+  slot=slot||[1,2].find(s=>!entries.some(a=>a.slot===s));
+  if(!activity&&!slot) return notify('Ten dzień ma już dwie aktywności. Edytuj jedną z nich.');
+  const values=activity||{date:day,slot,kind:suggestion?.kind||'endurance',duration_minutes:suggestion?.minutes||0,distance_km:0,status:'planned',rpe:suggestion?.rpe||'',notes:suggestion?.description||''};
+  for(const key of ['id','date','slot','kind','title','status','duration_minutes','distance_km','avg_hr','max_hr','rpe','notes']) form.elements[key].value=values[key]??'';
+  const imported=activity?.source==='tcx';
+  for(const key of ['duration_minutes','distance_km','avg_hr','max_hr']) form.elements[key].readOnly=imported;
+  $('#activity-dialog-title').textContent=activity?'Szczegóły aktywności':'Dodaj aktywność';
+  $('#delete-activity').hidden=!activity; $('#attach-tcx').hidden=!activity;
+  $('#imported-detail').hidden=!imported;
+  if(imported) {
+    const known=activity.zones_seconds.reduce((a,b)=>a+b,0);
+    const pace=activity.distance_km>0?Math.round(activity.duration_minutes/activity.distance_km*60):0;
+    const powerRelevant=(activity.kind==='cycling')===(data.profile.power_sport==='cycling');
+    const paceText=pace?`${Math.floor(pace/60)}:${String(pace%60).padStart(2,'0')} min/km`:'';
+    $('#imported-detail').innerHTML=`<b>TCX: ${esc(activity.imported_filename)}</b><br>Czas, dystans i HR pochodzą z pliku.${paceText?` Średnie tempo: ${paceText}.`:''}${activity.avg_power?`<br>Moc średnia ${activity.avg_power} W ${powerRelevant?`(${num(activity.avg_power/data.profile.threshold_power*100)}% progu ${data.profile.threshold_power} W)`:''}, max ${activity.max_power} W.`:''}<div class="mini-zones">${activity.zones_seconds.map((seconds,i)=>`<span style="color:${colors[i]}">Z${i+1} · ${num(seconds/60,1)} min</span>`).join('')}</div>${time(Math.max(0,activity.duration_minutes-known/60))} bez próbek HR.`;
+  }
+  $('#activity-dialog').showModal();
+}
+function openImport(activityId='') {
+  const form=$('#import-form');form.reset();form.elements.activity_id.value=activityId;
+  form.querySelector('.form-error').textContent='';$('#upload-filename').textContent='Nie wybrano pliku';
+  form.elements.date.disabled=!!activityId;
+  $('#import-date-hint').textContent=activityId?'TCX uzupełni wybraną aktywność. Jej data, rodzaj, RPE i notatki zostaną zachowane.':'Pusta data oznacza datę z TCX w strefie Europe/Warsaw. Aktywność zajmie pierwsze wolne miejsce w tym dniu.';
+  $('#import-dialog').showModal();
+}
+function openSettings() {
+  if(!data) return;
+  const form=$('#settings-form');form.querySelector('.form-error').textContent='';
+  for(const key of ['hr_max','hr_lthr','hr_rest','threshold_power','power_sport']) form.elements[key].value=data.profile[key];
+  data.profile.zone_limits.forEach((value,i)=>form.elements[`z${i+1}`].value=value);
+  $('#settings-dialog').showModal();
+}
+function moveMonth(delta) {
+  const d=parseDate(month+'-01');d.setMonth(d.getMonth()+delta);month=dateKey(d).slice(0,7);selected=month===today.slice(0,7)?today:month+'-01';load();
+}
+document.addEventListener('click',event=>{
+  const button=event.target.closest('button');if(!button) return;
+  if(button.classList.contains('close-button')) return button.closest('dialog').close();
+  if(button.dataset.view) return showView(button.dataset.view);
+  if(button.dataset.edit&&data) return openActivity(data.activities.find(a=>a.id===Number(button.dataset.edit)));
+  if(button.dataset.newDate) {selected=button.dataset.newDate;renderCalendar();renderDay();return openActivity(null,selected,Number(button.dataset.newSlot));}
+  if(button.dataset.day) {selected=button.dataset.day;renderCalendar();renderDay();renderCycles();}
+  if(button.dataset.suggestion) {
+    const day=button.dataset.suggestion;return openActivity(null,day,null,data.microcycles[day]);
+  }
+  if(button.dataset.goDate) {selected=button.dataset.goDate;month=selected.slice(0,7);load();}
+});
+$('#prev-month').onclick=()=>moveMonth(-1);$('#next-month').onclick=()=>moveMonth(1);
+$('#today-button').onclick=()=>{month=today.slice(0,7);selected=today;load();};
+$('#add-button').onclick=()=>openActivity();$('#import-button').onclick=()=>openImport();
+$('#settings-button').onclick=openSettings;$('#analysis-settings').onclick=openSettings;
+$('#activity-filter').onchange=()=>data&&renderTable();
+$('#cycle-date').onchange=event=>{if(!event.target.value)return;selected=event.target.value;if(selected.slice(0,7)!==month){month=selected.slice(0,7);load();}else renderCycles();};
+async function submit(form, callback) {
+  const button=form.querySelector('[type=submit]');button.disabled=true;form.querySelector('.form-error').textContent='';
+  try {await callback();} catch(error) {form.querySelector('.form-error').textContent=error.message;} finally {button.disabled=false;}
+}
+$('#activity-form').onsubmit=event=>{
+  event.preventDefault();const form=event.target;
+  submit(form,async()=>{
+    const values=Object.fromEntries(new FormData(form)), id=values.id;delete values.id;
+    const saved=await request(id?`/api/activities/${id}/`:'/api/activities/',{method:'POST',body:JSON.stringify(values)});
+    month=saved.date.slice(0,7);selected=saved.date;$('#activity-dialog').close();await load();notify('Aktywność zapisana.');
+  });
+};
+$('#delete-activity').onclick=async()=>{
+  const form=$('#activity-form');if(!confirm('Usunąć tę aktywność?')) return;
+  try {await request(`/api/activities/${form.elements.id.value}/`,{method:'DELETE'});$('#activity-dialog').close();await load();notify('Aktywność usunięta.');}catch(error){form.querySelector('.form-error').textContent=error.message;}
+};
+$('#attach-tcx').onclick=()=>{const id=$('#activity-form').elements.id.value;$('#activity-dialog').close();openImport(id);};
+$('#import-form').onsubmit=event=>{
+  event.preventDefault();submit(event.target,async()=>{
+    const saved=await request('/api/import/',{method:'POST',body:new FormData(event.target)});
+    month=saved.date.slice(0,7);selected=saved.date;$('#import-dialog').close();await load();notify('Trening z Garmina został zaimportowany.');openActivity(data.activities.find(a=>a.id===saved.id));
+  });
+};
+const fileInput=$('#import-form').elements.file;
+fileInput.onchange=()=>$('#upload-filename').textContent=fileInput.files[0]?.name||'Nie wybrano pliku';
+const drop=$('.upload-area');
+for(const name of ['dragenter','dragover']) drop.addEventListener(name,event=>{event.preventDefault();drop.classList.add('dragging');});
+for(const name of ['dragleave','drop']) drop.addEventListener(name,event=>{event.preventDefault();drop.classList.remove('dragging');});
+drop.addEventListener('drop',event=>{if(event.dataTransfer.files.length){fileInput.files=event.dataTransfer.files;fileInput.dispatchEvent(new Event('change'));}});
+$('#calculate-zones').onclick=()=>{const form=$('#settings-form'),lt=Number(form.elements.hr_lthr.value);[.85,.90,.95,1].forEach((fraction,i)=>form.elements[`z${i+1}`].value=Math.ceil(lt*fraction)-1);};
+$('#settings-form').onsubmit=event=>{
+  event.preventDefault();const form=event.target;
+  submit(form,async()=>{
+    const values=Object.fromEntries(new FormData(form));values.zone_limits=[1,2,3,4].map(i=>Number(values[`z${i}`]));
+    await request('/api/profile/',{method:'POST',body:JSON.stringify(values)});$('#settings-dialog').close();await load();notify('Strefy zapisane. Analiza została przeliczona.');
+  });
+};
+if (window.FormaLocal) window.FormaLocal.installUI({load, notify, getMonth:()=>month, today});
+load();
+
+</script>
+</body></html>
