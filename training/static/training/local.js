@@ -70,7 +70,7 @@
       a.avg_power=number(item.avg_power,'średnia moc',0,5000,true,true);a.max_power=number(item.max_power,'maksymalna moc',0,5000,true,true);
       a.splits=Array.isArray(item.splits)?item.splits.slice(0,1000).map(s=>({distance_km:number(s.distance_km,'dystans odcinka',0,100,true),duration_seconds:number(s.duration_seconds,'czas odcinka',0,86400),avg_hr:number(s.avg_hr,'średnie tętno odcinka',20,250,true,true),max_hr:number(s.max_hr,'maksymalne tętno odcinka',20,250,true,true),avg_power:number(s.avg_power,'średnia moc odcinka',0,5000,true,true),max_power:number(s.max_power,'maksymalna moc odcinka',0,5000,true,true)})):[];
       const peaks=item.peak_metrics&&typeof item.peak_metrics==='object'?item.peak_metrics:{};
-      a.peak_metrics={speed_5s_kmh:number(peaks.speed_5s_kmh,'prędkość 5 s',0,80,false,true),speed_30s_kmh:number(peaks.speed_30s_kmh,'prędkość 30 s',0,80,false,true),best_1km_pace_seconds:number(peaks.best_1km_pace_seconds,'tempo 1 km',0,3600,false,true),power_5s_w:number(peaks.power_5s_w,'moc 5 s',0,5000,true,true),max_hr_bpm:number(peaks.max_hr_bpm,'maksymalne tętno',20,250,true,true),split_mode:['laps','kilometers'].includes(peaks.split_mode)?peaks.split_mode:''};
+      a.peak_metrics={speed_5s_kmh:number(peaks.speed_5s_kmh,'prędkość 5 s',0,80,false,true),speed_30s_kmh:number(peaks.speed_30s_kmh,'prędkość 30 s',0,80,false,true),best_1km_pace_seconds:number(peaks.best_1km_pace_seconds,'tempo 1 km',0,3600,false,true),power_5s_w:number(peaks.power_5s_w,'moc 5 s',0,5000,true,true),max_hr_bpm:number(peaks.max_hr_bpm,'maksymalne tętno',20,250,true,true),split_mode:['laps','kilometers'].includes(peaks.split_mode)?peaks.split_mode:'',sprint_threshold_kmh:number(peaks.sprint_threshold_kmh,'próg sprintu',10,45,false,true)??25,sprint_minimum_seconds:number(peaks.sprint_minimum_seconds,'minimalny czas sprintu',1,60,false,true)??2,sprint_analysis_available:peaks.sprint_analysis_available===true,sprint_count:number(peaks.sprint_count,'liczba sprintów',0,1000,true,true),sprint_total_distance_m:number(peaks.sprint_total_distance_m,'dystans sprintów',0,100000,false,true),sprint_max_speed_kmh:number(peaks.sprint_max_speed_kmh,'prędkość maksymalna sprintu',0,45,false,true),sprint_efforts:Array.isArray(peaks.sprint_efforts)?peaks.sprint_efforts.slice(0,1000).map(e=>({start_offset_seconds:number(e.start_offset_seconds,'czas rozpoczęcia sprintu',0,86400,false),duration_seconds:number(e.duration_seconds,'czas sprintu',0,3600,false),distance_m:number(e.distance_m,'dystans sprintu',0,10000,false),average_speed_kmh:number(e.average_speed_kmh,'średnia prędkość sprintu',0,45,false),max_speed_kmh:number(e.max_speed_kmh,'prędkość maksymalna sprintu',0,45,false)})):[]};
       if(!Array.isArray(item.hr_segments)||item.hr_segments.length>1000) fail('Nieprawidłowe próbki HR w kopii.');
       a.hr_segments=item.hr_segments.map(s=>{
         if(!Array.isArray(s)||s.length!==2) fail('Nieprawidłowa próbka HR.');
@@ -181,30 +181,52 @@
     }
     return best===null?null:roundEven(best);
   }
+  function detectSprints(tracks,threshold=25,minimum=2) {
+    const efforts=[],allTimes=tracks.flat().map(point=>point.t);let eligible=0;
+    if(!allTimes.length)return {available:false,efforts};
+    const workoutStart=allTimes.reduce((min,value)=>Math.min(min,value),Infinity);
+    const save=bout=>{
+      const seconds=bout.reduce((sum,row)=>sum+row.seconds,0),distance=bout.reduce((sum,row)=>sum+row.distance,0);
+      if(seconds<minimum||distance<=0)return;
+      efforts.push({start_offset_seconds:Math.round((bout[0].start-workoutStart)*10)/10,duration_seconds:Math.round(seconds*10)/10,distance_m:Math.round(distance*10)/10,average_speed_kmh:Math.round(distance/seconds*36)/10,max_speed_kmh:Math.round(Math.max(...bout.map(row=>row.speed))*10)/10});
+    };
+    for(const track of tracks){const points=[...track].sort((a,b)=>a.t-b.t);let bout=[];
+      for(let i=1;i<points.length;i++){
+        const previous=points[i-1],current=points[i],seconds=current.t-previous.t;
+        if(seconds<=0||seconds>3){if(bout.length)save(bout);bout=[];continue;}
+        eligible++;const distance=current.distance-previous.distance,speed=distance/seconds*3.6;
+        if(speed>=threshold&&speed<=45&&distance>0){if(bout.length&&previous.t-(bout.at(-1).start+bout.at(-1).seconds)>2){save(bout);bout=[];}bout.push({start:previous.t,seconds,distance,speed});}
+        else if(bout.length&&current.t-(bout.at(-1).start+bout.at(-1).seconds)>2){save(bout);bout=[];}
+      }
+      if(bout.length)save(bout);
+    }
+    return {available:eligible>=2,efforts};
+  }
   function parseTCX(text) {
     if(!text||/<!DOCTYPE|<!ENTITY/i.test(text))fail('Nieprawidłowy lub niedozwolony plik XML/TCX.');
     const xml=new DOMParser().parseFromString(text,'application/xml');
     if(descendants(xml,'parsererror').length||xml.documentElement.localName!=='TrainingCenterDatabase')fail('To nie jest poprawny plik Garmin TCX.');
     const activities=descendants(xml,'Activity');if(activities.length!==1)fail('Importuj plik TCX zawierający jedną aktywność.');
-    const a=activities[0],starts=[],timestamps=[],hearts=[],powers=[],durations=[],distances=[],samples=new Map(),allPoints=[],lapRows=[];let fallback=0,powerWeighted=0,powerSeconds=0;
+    const a=activities[0],starts=[],timestamps=[],hearts=[],powers=[],durations=[],distances=[],samples=new Map(),allPoints=[],lapRows=[],sprintTracks=[];let fallback=0,powerWeighted=0,powerSeconds=0;
     for(const lap of children(a,'Lap')) {
       if(lap.getAttribute('StartTime'))starts.push(xmlTime(lap.getAttribute('StartTime')));
       for(const [name,target] of [['TotalTimeSeconds',durations],['DistanceMeters',distances]])for(const node of children(lap,name)){const n=xmlNumber(node,name);if(n!==null)target.push(n);}
       const lapPoints=[];
       for(const track of children(lap,'Track')) {
-        let previous=null;
+        let previous=null;const sprintPoints=[];
         for(const point of children(track,'Trackpoint')) {
           const t=children(point,'Time')[0],timestamp=t?xmlTime(t.textContent):null;
           const hrNode=children(point,'HeartRateBpm')[0];let hr=hrNode?xmlNumber(hrNode,'Value'):null;
           hr=hr!==null&&hr>=20&&hr<=250?roundEven(hr):null;
           const distance=xmlNumber(point,'DistanceMeters');let power=xmlNumber(point,'Watts');if(power>5000)power=null;
-          if(timestamp!==null)timestamps.push(timestamp);if(hr)hearts.push(hr);if(power!==null)powers.push(power);if(timestamp!==null&&distance!==null)lapPoints.push({t:timestamp/1000,distance,hr,power});
+          if(timestamp!==null)timestamps.push(timestamp);if(hr)hearts.push(hr);if(power!==null)powers.push(power);if(timestamp!==null&&distance!==null){lapPoints.push({t:timestamp/1000,distance,hr,power});sprintPoints.push({t:timestamp/1000,distance});}
           if(previous) {
             if(timestamp!==null&&previous.timestamp!==null){const seconds=(timestamp-previous.timestamp)/1000;if(seconds>0&&seconds<=120){if(previous.hr)samples.set(previous.hr,(samples.get(previous.hr)||0)+seconds);if(previous.power!==null){powerWeighted+=previous.power*seconds;powerSeconds+=seconds;}}}
             if(distance!==null&&previous.distance!==null)fallback+=Math.max(0,distance-previous.distance);
           }
           previous={timestamp,hr,distance,power};
         }
+        if(sprintPoints.length>1)sprintTracks.push(sprintPoints);
       }
       lapPoints.sort((x,y)=>x.t-y.t);allPoints.push(...lapPoints);
       const lapDuration=xmlNumber(lap,'TotalTimeSeconds'),lapDistance=xmlNumber(lap,'DistanceMeters');
@@ -222,7 +244,7 @@
     if(max_hr===null)for(const node of descendants(a,'MaximumHeartRateBpm')){const n=xmlNumber(node,'Value');if(n!==null&&n>=20&&n<=250)max_hr=Math.max(max_hr||0,roundEven(n));}
     const meters=distances.length?distances.reduce((x,y)=>x+y,0):fallback;if(!Number.isFinite(meters)||meters>1000000)fail('Nieprawidłowy dystans w TCX.');
     const kilometerSplits=automaticSplits(allPoints),splits=lapRows.length>1?lapRows:kilometerSplits,paceSplits=kilometerSplits.length?kilometerSplits:splits,oneKmPaces=paceSplits.filter(s=>s.distance_km>=.9&&s.distance_km<=1.1).map(s=>s.duration_seconds/s.distance_km),points=allPoints.sort((x,y)=>x.t-y.t);
-    const peak_metrics={speed_5s_kmh:peakSpeed(points,5),speed_30s_kmh:peakSpeed(points,30),best_1km_pace_seconds:oneKmPaces.length?Math.round(Math.min(...oneKmPaces)*100)/100:null,power_5s_w:peakPower(points),max_hr_bpm:max_hr,split_mode:lapRows.length>1?'laps':splits.length?'kilometers':''};
+    const sprintAnalysis=detectSprints(sprintTracks),peak_metrics={speed_5s_kmh:peakSpeed(points,5),speed_30s_kmh:peakSpeed(points,30),best_1km_pace_seconds:oneKmPaces.length?Math.round(Math.min(...oneKmPaces)*100)/100:null,power_5s_w:peakPower(points),max_hr_bpm:max_hr,split_mode:lapRows.length>1?'laps':splits.length?'kilometers':'',sprint_threshold_kmh:25,sprint_minimum_seconds:2,sprint_analysis_available:sprintAnalysis.available,sprint_count:sprintAnalysis.available?sprintAnalysis.efforts.length:null,sprint_total_distance_m:Math.round(sprintAnalysis.efforts.reduce((sum,e)=>sum+e.distance_m,0)*10)/10,sprint_max_speed_kmh:sprintAnalysis.efforts.length?Math.max(...sprintAnalysis.efforts.map(e=>e.max_speed_kmh)):null,sprint_efforts:sprintAnalysis.efforts};
     return {date:warsawDate(new Date(earliest)),kind:a.getAttribute('Sport')==='Biking'?'cycling':'endurance',duration_seconds:Math.round(duration*100)/100,distance_km:Math.round(meters)/1000,avg_hr,max_hr,avg_power:powerSeconds?roundEven(powerWeighted/powerSeconds):null,max_power:powers.length?roundEven(powers.reduce((max,v)=>Math.max(max,v),0)):null,hr_segments:[...samples].sort((a,b)=>a[0]-b[0]).map(([hr,s])=>[hr,Math.round(s*1000)/1000]),splits,peak_metrics};
   }
   function freeSlot(db,date,id=null,slot=null) {

@@ -49,7 +49,8 @@ W Garmin Connect otwórz trening i wybierz eksport do TCX. W aplikacji wybierz *
 - Data pochodzi z TCX i jest przeliczana na `Europe/Warsaw`. Możesz wskazać inną datę przy imporcie.
 - Nowy import zajmuje pierwsze wolne miejsce. Aby uzupełnić zaplanowany trening, otwórz go z kalendarza i wybierz **Importuj TCX do tej aktywności**. Czas, dystans, tętno i dostępne dane mocy wypełnią ten wpis; jego data, kategoria, RPE i notatki pozostaną zachowane. Dotyczy to także meczu, więc jego dystans będzie wykazany w statystyce meczowej.
 - W **Analizie odcinków** zobaczysz okrążenia zapisane w Garminie albo automatyczne odcinki kilometrowe, jeśli TCX zawiera próbki GPS. Do szczytowej prędkości używamy średniej z 5 s, a moc pokazujemy jako średnią z 5 s, aby pojedyncza próbka nie wyznaczała rekordu.
-- Trendy obejmują importowane treningi biegowe z ostatnich 12 tygodni. Starsze importy nie zawierają obliczonych odcinków i szczytów; jeśli chcesz je uwzględnić, dołącz ponownie ich pliki TCX.
+- Sprint to prędkość GPS ≥25 km/h utrzymana przez co najmniej 2 s; krótkie przerwy do 2 s łączymy. Przy próbkach rzadszych niż co 3 s wynik jest oznaczany jako niedostępny, a nie jako zero sprintów.
+- Trendy obejmują importowane treningi biegowe z ostatnich 12 tygodni. Starsze importy nie zawierają obliczonych odcinków, szczytów ani sprintów; jeśli chcesz je uwzględnić, dołącz ponownie ich pliki TCX.
 - Czas w strefach liczony jest z odstępów między kolejnymi próbkami w obrębie każdego odcinka `Track`. Poprzednia próbka opisuje następujący po niej odcinek. Przerwy ponad 120 sekund i odcinki bez tętna pozostają bez danych HR. Czas próbek jest ograniczony do łącznego czasu z okrążeń.
 - Brakujące próbki nie są zastępowane średnim tętnem. Ręczne aktywności nie mają automatycznie wyliczanego czasu w strefach.
 - Zmiana stref przelicza zachowane próbki. Czas, dystans i HR importu są tylko do odczytu; poprawione dane można wczytać ponownie.

@@ -86,7 +86,7 @@
   <div class="bottom-grid"><article class="card"><div class="card-heading"><div><span class="section-eyebrow">INTENSYWNOŚĆ</span><h3>Gdzie pracowało Twoje serce?</h3></div><button class="text-button" data-view="analysis">Pełna analiza ↗</button></div><div id="zones-compact"></div></article><article class="card"><span class="section-eyebrow">RÓWNOWAGA TRENINGU</span><h3>Każdy bodziec ma znaczenie.</h3><div id="types-compact"></div></article></div>
  </section>
  <section id="analysis-view" class="view" hidden><div class="analysis-grid"><article class="card"><div class="card-heading"><div><span class="section-eyebrow">DANE Z POMIARU</span><h3>Czas w strefach tętna</h3></div><button class="text-button" id="analysis-settings">Edytuj strefy ↗</button></div><div id="zones-full"></div><p class="footnote">Czas liczony między próbkami TCX, osobno dla każdego odcinka. Przerwy powyżej 2 minut i brakujące próbki trafiają do „bez danych HR”.</p><div id="hr-overview" class="hr-overview"></div></article><article class="card"><span class="section-eyebrow">TYGODNIOWY RYTM</span><h3>Obciążenie i objętość</h3><div id="weekly-chart"></div><p class="footnote">sRPE = czas w minutach × RPE (1–10). Podsumowanie obejmuje wykonane aktywności w wybranym miesiącu; tygodnie na jego granicach są częściowe.</p></article><article class="card wide"><span class="section-eyebrow">RODZAJE AKTYWNOŚCI</span><h3>Jak rozkładał się Twój trening?</h3><div id="types-full"></div></article><article class="card wide"><div class="card-heading"><div><span class="section-eyebrow">DZIENNIK</span><h3>Szczegóły aktywności</h3></div><select id="activity-filter" aria-label="Filtr aktywności"><option value="all">Wszystkie aktywności</option><option value="done">Wykonane</option><option value="planned">Zaplanowane</option><option value="matches">Mecze</option></select></div><div class="table-scroll"><table><thead><tr><th>Data</th><th>Aktywność</th><th>Status</th><th>Czas</th><th>Dystans</th><th>Śr. / max HR</th><th>Moc śr.</th><th>RPE</th><th>sRPE</th></tr></thead><tbody id="activity-table"></tbody></table></div></article></div></section>
- <section id="running-analysis-view" class="view" hidden><div class="analysis-grid"><article class="card wide"><span class="section-eyebrow">BIEGANIE · BODŹCE TRENINGOWE</span><h3>Jakie formy biegu ćwiczysz?</h3><p class="muted">Analiza wykonanych aktywności w wybranym miesiącu. Kilometraż treningowy nie obejmuje meczów. Przy imporcie TCX możesz przypisać dane do planowanej kategorii.</p><div id="running-overview" class="hr-overview running-overview"></div><div id="running-types" class="running-types"></div></article><article class="card"><span class="section-eyebrow">OBJĘTOŚĆ BIEGOWA · OSTATNIE 12 TYGODNI</span><h3>Kilometry na tydzień</h3><div id="running-weekly-chart"></div><p class="footnote">Biegi rozliczane od poniedziałku do niedzieli. Rozciąganie regeneracyjne nie wlicza się do dystansu.</p></article><article class="card wide"><div class="card-heading"><div><span class="section-eyebrow">MAKSYMALNE OSIĄGI · OSTATNIE 12 TYGODNI</span><h3>Czy wyniki rosną czy spadają?</h3></div><select id="peak-kind-filter" aria-label="Filtr rodzaju biegu"></select></div><div id="peak-trends" class="peak-trends"></div><p class="footnote">Kierunek porównuje średnią z maksymalnie 4 wcześniejszych i 4 ostatnich sesji; zmiany poniżej 2% oznaczamy jako podobny poziom. Porównuj podobne treningi. Prędkość zależy od GPS i nawierzchni. Tętno maksymalne pokazujemy jako reakcję organizmu, nie samodzielny wskaźnik formy.</p></article><article class="card wide"><div class="card-heading"><div><span class="section-eyebrow">GARMIN · TCX</span><h3>Analiza odcinków</h3></div><select id="split-activity" aria-label="Wybierz aktywność do analizy odcinków"></select></div><div class="table-scroll"><table><thead><tr><th>Odcinek</th><th>Dystans</th><th>Czas</th><th>Tempo</th><th>Śr. / max HR</th><th>Śr. / max moc</th></tr></thead><tbody id="split-table"></tbody></table></div><p id="split-note" class="footnote"></p></article><article class="card"><span class="section-eyebrow">ODBUDOWA</span><h3>Regeneracja</h3><p id="running-recovery" class="running-recovery"></p><p class="footnote">Bieg regeneracyjny i rozciąganie są osobnymi rodzajami aktywności.</p></article></div></section>
+ <section id="running-analysis-view" class="view" hidden><div class="analysis-grid"><article class="card wide"><span class="section-eyebrow">BIEGANIE · BODŹCE TRENINGOWE</span><h3>Jakie formy biegu ćwiczysz?</h3><p class="muted">Analiza wykonanych aktywności w wybranym miesiącu. Kilometraż treningowy nie obejmuje meczów. Przy imporcie TCX możesz przypisać dane do planowanej kategorii.</p><div id="running-overview" class="hr-overview running-overview"></div><div id="running-types" class="running-types"></div></article><article class="card"><span class="section-eyebrow">OBJĘTOŚĆ BIEGOWA · OSTATNIE 12 TYGODNI</span><h3>Kilometry na tydzień</h3><div id="running-weekly-chart"></div><p class="footnote">Biegi rozliczane od poniedziałku do niedzieli. Rozciąganie regeneracyjne nie wlicza się do dystansu.</p></article><article class="card wide"><div class="card-heading"><div><span class="section-eyebrow">MAKSYMALNE OSIĄGI · OSTATNIE 12 TYGODNI</span><h3>Czy wyniki rosną czy spadają?</h3></div><select id="peak-kind-filter" aria-label="Filtr rodzaju biegu"></select></div><div id="peak-trends" class="peak-trends"></div><p class="footnote">Kierunek porównuje średnią z maksymalnie 4 wcześniejszych i 4 ostatnich sesji; zmiany poniżej 2% oznaczamy jako podobny poziom. Porównuj podobne treningi. Prędkość zależy od GPS i nawierzchni. Tętno maksymalne pokazujemy jako reakcję organizmu, nie samodzielny wskaźnik formy.</p></article><article class="card wide"><div class="card-heading"><div><span class="section-eyebrow">GARMIN · TCX</span><h3>Analiza odcinków</h3></div><select id="split-activity" aria-label="Wybierz aktywność do analizy odcinków"></select></div><div class="table-scroll"><table><thead><tr><th>Odcinek</th><th>Dystans</th><th>Czas</th><th>Tempo</th><th>Śr. / max HR</th><th>Śr. / max moc</th></tr></thead><tbody id="split-table"></tbody></table></div><p id="split-note" class="footnote"></p></article><article class="card wide"><div class="card-heading"><div><span class="section-eyebrow">MECZE · OSTATNIE 12 TYGODNI</span><h3>Wykryte sprinty w meczach</h3></div></div><div class="table-scroll"><table><thead><tr><th>Data</th><th>Rodzaj meczu</th><th>Sprinty</th><th>Dystans sprintów</th><th>Prędkość max</th></tr></thead><tbody id="match-sprint-table"></tbody></table></div><p class="footnote">Sprint: prędkość GPS co najmniej 25 km/h przez minimum 2 s. Krótkie przerwy do 2 s łączymy w jeden zryw; przy rzadkich próbkach GPS wynik może być niedostępny.</p></article><article class="card"><span class="section-eyebrow">ODBUDOWA</span><h3>Regeneracja</h3><p id="running-recovery" class="running-recovery"></p><p class="footnote">Bieg regeneracyjny i rozciąganie są osobnymi rodzajami aktywności.</p></article></div></section>
  <section id="cycles-view" class="view" hidden><article class="card"><div class="card-heading"><div><span class="section-eyebrow">MIKROCYKL MECZOWY</span><h3>Zbuduj tydzień wokół meczu.</h3></div><input id="cycle-date" type="date" aria-label="Wybierz dzień mikrocyklu"></div><p class="muted">MD oznacza dzień meczu. Propozycje uwzględniają mecze przed i po wybranym dniu, także na granicach miesięcy. Dopasuj je do swojej regeneracji i planu.</p><div id="cycle-week" class="cycle-week"></div></article><article class="card cycle-guide"><h3>Rytm, który możesz dostosować</h3><p><b>Po meczu:</b> regeneracja i stopniowy powrót. <b>3 dni przed:</b> miejsce na bodziec jakościowy. <b>2 dni przed:</b> mniejsza objętość. <b>W przeddzień:</b> krótka aktywacja. Gdy mecze są blisko siebie, pierwszeństwo ma odbudowa po ostatnim.</p></article></section>
  <footer class="main-footer"><span>forma. <span>Przestrzeń na dobrą formę.</span></span><span>Dane zapisują się w tej przeglądarce.</span></footer>
 </main>
@@ -168,7 +168,7 @@
       a.avg_power=number(item.avg_power,'średnia moc',0,5000,true,true);a.max_power=number(item.max_power,'maksymalna moc',0,5000,true,true);
       a.splits=Array.isArray(item.splits)?item.splits.slice(0,1000).map(s=>({distance_km:number(s.distance_km,'dystans odcinka',0,100,true),duration_seconds:number(s.duration_seconds,'czas odcinka',0,86400),avg_hr:number(s.avg_hr,'średnie tętno odcinka',20,250,true,true),max_hr:number(s.max_hr,'maksymalne tętno odcinka',20,250,true,true),avg_power:number(s.avg_power,'średnia moc odcinka',0,5000,true,true),max_power:number(s.max_power,'maksymalna moc odcinka',0,5000,true,true)})):[];
       const peaks=item.peak_metrics&&typeof item.peak_metrics==='object'?item.peak_metrics:{};
-      a.peak_metrics={speed_5s_kmh:number(peaks.speed_5s_kmh,'prędkość 5 s',0,80,false,true),speed_30s_kmh:number(peaks.speed_30s_kmh,'prędkość 30 s',0,80,false,true),best_1km_pace_seconds:number(peaks.best_1km_pace_seconds,'tempo 1 km',0,3600,false,true),power_5s_w:number(peaks.power_5s_w,'moc 5 s',0,5000,true,true),max_hr_bpm:number(peaks.max_hr_bpm,'maksymalne tętno',20,250,true,true),split_mode:['laps','kilometers'].includes(peaks.split_mode)?peaks.split_mode:''};
+      a.peak_metrics={speed_5s_kmh:number(peaks.speed_5s_kmh,'prędkość 5 s',0,80,false,true),speed_30s_kmh:number(peaks.speed_30s_kmh,'prędkość 30 s',0,80,false,true),best_1km_pace_seconds:number(peaks.best_1km_pace_seconds,'tempo 1 km',0,3600,false,true),power_5s_w:number(peaks.power_5s_w,'moc 5 s',0,5000,true,true),max_hr_bpm:number(peaks.max_hr_bpm,'maksymalne tętno',20,250,true,true),split_mode:['laps','kilometers'].includes(peaks.split_mode)?peaks.split_mode:'',sprint_threshold_kmh:number(peaks.sprint_threshold_kmh,'próg sprintu',10,45,false,true)??25,sprint_minimum_seconds:number(peaks.sprint_minimum_seconds,'minimalny czas sprintu',1,60,false,true)??2,sprint_analysis_available:peaks.sprint_analysis_available===true,sprint_count:number(peaks.sprint_count,'liczba sprintów',0,1000,true,true),sprint_total_distance_m:number(peaks.sprint_total_distance_m,'dystans sprintów',0,100000,false,true),sprint_max_speed_kmh:number(peaks.sprint_max_speed_kmh,'prędkość maksymalna sprintu',0,45,false,true),sprint_efforts:Array.isArray(peaks.sprint_efforts)?peaks.sprint_efforts.slice(0,1000).map(e=>({start_offset_seconds:number(e.start_offset_seconds,'czas rozpoczęcia sprintu',0,86400,false),duration_seconds:number(e.duration_seconds,'czas sprintu',0,3600,false),distance_m:number(e.distance_m,'dystans sprintu',0,10000,false),average_speed_kmh:number(e.average_speed_kmh,'średnia prędkość sprintu',0,45,false),max_speed_kmh:number(e.max_speed_kmh,'prędkość maksymalna sprintu',0,45,false)})):[]};
       if(!Array.isArray(item.hr_segments)||item.hr_segments.length>1000) fail('Nieprawidłowe próbki HR w kopii.');
       a.hr_segments=item.hr_segments.map(s=>{
         if(!Array.isArray(s)||s.length!==2) fail('Nieprawidłowa próbka HR.');
@@ -279,30 +279,52 @@
     }
     return best===null?null:roundEven(best);
   }
+  function detectSprints(tracks,threshold=25,minimum=2) {
+    const efforts=[],allTimes=tracks.flat().map(point=>point.t);let eligible=0;
+    if(!allTimes.length)return {available:false,efforts};
+    const workoutStart=allTimes.reduce((min,value)=>Math.min(min,value),Infinity);
+    const save=bout=>{
+      const seconds=bout.reduce((sum,row)=>sum+row.seconds,0),distance=bout.reduce((sum,row)=>sum+row.distance,0);
+      if(seconds<minimum||distance<=0)return;
+      efforts.push({start_offset_seconds:Math.round((bout[0].start-workoutStart)*10)/10,duration_seconds:Math.round(seconds*10)/10,distance_m:Math.round(distance*10)/10,average_speed_kmh:Math.round(distance/seconds*36)/10,max_speed_kmh:Math.round(Math.max(...bout.map(row=>row.speed))*10)/10});
+    };
+    for(const track of tracks){const points=[...track].sort((a,b)=>a.t-b.t);let bout=[];
+      for(let i=1;i<points.length;i++){
+        const previous=points[i-1],current=points[i],seconds=current.t-previous.t;
+        if(seconds<=0||seconds>3){if(bout.length)save(bout);bout=[];continue;}
+        eligible++;const distance=current.distance-previous.distance,speed=distance/seconds*3.6;
+        if(speed>=threshold&&speed<=45&&distance>0){if(bout.length&&previous.t-(bout.at(-1).start+bout.at(-1).seconds)>2){save(bout);bout=[];}bout.push({start:previous.t,seconds,distance,speed});}
+        else if(bout.length&&current.t-(bout.at(-1).start+bout.at(-1).seconds)>2){save(bout);bout=[];}
+      }
+      if(bout.length)save(bout);
+    }
+    return {available:eligible>=2,efforts};
+  }
   function parseTCX(text) {
     if(!text||/<!DOCTYPE|<!ENTITY/i.test(text))fail('Nieprawidłowy lub niedozwolony plik XML/TCX.');
     const xml=new DOMParser().parseFromString(text,'application/xml');
     if(descendants(xml,'parsererror').length||xml.documentElement.localName!=='TrainingCenterDatabase')fail('To nie jest poprawny plik Garmin TCX.');
     const activities=descendants(xml,'Activity');if(activities.length!==1)fail('Importuj plik TCX zawierający jedną aktywność.');
-    const a=activities[0],starts=[],timestamps=[],hearts=[],powers=[],durations=[],distances=[],samples=new Map(),allPoints=[],lapRows=[];let fallback=0,powerWeighted=0,powerSeconds=0;
+    const a=activities[0],starts=[],timestamps=[],hearts=[],powers=[],durations=[],distances=[],samples=new Map(),allPoints=[],lapRows=[],sprintTracks=[];let fallback=0,powerWeighted=0,powerSeconds=0;
     for(const lap of children(a,'Lap')) {
       if(lap.getAttribute('StartTime'))starts.push(xmlTime(lap.getAttribute('StartTime')));
       for(const [name,target] of [['TotalTimeSeconds',durations],['DistanceMeters',distances]])for(const node of children(lap,name)){const n=xmlNumber(node,name);if(n!==null)target.push(n);}
       const lapPoints=[];
       for(const track of children(lap,'Track')) {
-        let previous=null;
+        let previous=null;const sprintPoints=[];
         for(const point of children(track,'Trackpoint')) {
           const t=children(point,'Time')[0],timestamp=t?xmlTime(t.textContent):null;
           const hrNode=children(point,'HeartRateBpm')[0];let hr=hrNode?xmlNumber(hrNode,'Value'):null;
           hr=hr!==null&&hr>=20&&hr<=250?roundEven(hr):null;
           const distance=xmlNumber(point,'DistanceMeters');let power=xmlNumber(point,'Watts');if(power>5000)power=null;
-          if(timestamp!==null)timestamps.push(timestamp);if(hr)hearts.push(hr);if(power!==null)powers.push(power);if(timestamp!==null&&distance!==null)lapPoints.push({t:timestamp/1000,distance,hr,power});
+          if(timestamp!==null)timestamps.push(timestamp);if(hr)hearts.push(hr);if(power!==null)powers.push(power);if(timestamp!==null&&distance!==null){lapPoints.push({t:timestamp/1000,distance,hr,power});sprintPoints.push({t:timestamp/1000,distance});}
           if(previous) {
             if(timestamp!==null&&previous.timestamp!==null){const seconds=(timestamp-previous.timestamp)/1000;if(seconds>0&&seconds<=120){if(previous.hr)samples.set(previous.hr,(samples.get(previous.hr)||0)+seconds);if(previous.power!==null){powerWeighted+=previous.power*seconds;powerSeconds+=seconds;}}}
             if(distance!==null&&previous.distance!==null)fallback+=Math.max(0,distance-previous.distance);
           }
           previous={timestamp,hr,distance,power};
         }
+        if(sprintPoints.length>1)sprintTracks.push(sprintPoints);
       }
       lapPoints.sort((x,y)=>x.t-y.t);allPoints.push(...lapPoints);
       const lapDuration=xmlNumber(lap,'TotalTimeSeconds'),lapDistance=xmlNumber(lap,'DistanceMeters');
@@ -320,7 +342,7 @@
     if(max_hr===null)for(const node of descendants(a,'MaximumHeartRateBpm')){const n=xmlNumber(node,'Value');if(n!==null&&n>=20&&n<=250)max_hr=Math.max(max_hr||0,roundEven(n));}
     const meters=distances.length?distances.reduce((x,y)=>x+y,0):fallback;if(!Number.isFinite(meters)||meters>1000000)fail('Nieprawidłowy dystans w TCX.');
     const kilometerSplits=automaticSplits(allPoints),splits=lapRows.length>1?lapRows:kilometerSplits,paceSplits=kilometerSplits.length?kilometerSplits:splits,oneKmPaces=paceSplits.filter(s=>s.distance_km>=.9&&s.distance_km<=1.1).map(s=>s.duration_seconds/s.distance_km),points=allPoints.sort((x,y)=>x.t-y.t);
-    const peak_metrics={speed_5s_kmh:peakSpeed(points,5),speed_30s_kmh:peakSpeed(points,30),best_1km_pace_seconds:oneKmPaces.length?Math.round(Math.min(...oneKmPaces)*100)/100:null,power_5s_w:peakPower(points),max_hr_bpm:max_hr,split_mode:lapRows.length>1?'laps':splits.length?'kilometers':''};
+    const sprintAnalysis=detectSprints(sprintTracks),peak_metrics={speed_5s_kmh:peakSpeed(points,5),speed_30s_kmh:peakSpeed(points,30),best_1km_pace_seconds:oneKmPaces.length?Math.round(Math.min(...oneKmPaces)*100)/100:null,power_5s_w:peakPower(points),max_hr_bpm:max_hr,split_mode:lapRows.length>1?'laps':splits.length?'kilometers':'',sprint_threshold_kmh:25,sprint_minimum_seconds:2,sprint_analysis_available:sprintAnalysis.available,sprint_count:sprintAnalysis.available?sprintAnalysis.efforts.length:null,sprint_total_distance_m:Math.round(sprintAnalysis.efforts.reduce((sum,e)=>sum+e.distance_m,0)*10)/10,sprint_max_speed_kmh:sprintAnalysis.efforts.length?Math.max(...sprintAnalysis.efforts.map(e=>e.max_speed_kmh)):null,sprint_efforts:sprintAnalysis.efforts};
     return {date:warsawDate(new Date(earliest)),kind:a.getAttribute('Sport')==='Biking'?'cycling':'endurance',duration_seconds:Math.round(duration*100)/100,distance_km:Math.round(meters)/1000,avg_hr,max_hr,avg_power:powerSeconds?roundEven(powerWeighted/powerSeconds):null,max_power:powers.length?roundEven(powers.reduce((max,v)=>Math.max(max,v),0)):null,hr_segments:[...samples].sort((a,b)=>a[0]-b[0]).map(([hr,s])=>[hr,Math.round(s*1000)/1000]),splits,peak_metrics};
   }
   function freeSlot(db,date,id=null,slot=null) {
@@ -528,6 +550,7 @@ function renderRunningAnalysis() {
   $('#running-recovery').innerHTML=recovery.count?`${recovery.count} aktywności regeneracyjne · ${time(recovery.minutes)}${recovery.distance?` · ${num(recovery.distance,2)} km biegu regeneracyjnego`:''}`:'Zapisuj osobno lekki bieg i rozciąganie regeneracyjne, aby śledzić ich regularność.';
   renderPeakTrends(history.filter(a=>RUNNING_KINDS.has(a.kind)));
   renderSplits(history.filter(a=>RUNNING_KINDS.has(a.kind)));
+  renderMatchSprints(history);
 }
 function renderPeakTrends(activities) {
   const filter=$('#peak-kind-filter');
@@ -568,6 +591,16 @@ function renderSplits(activities) {
   }).join('');
   $('#split-note').textContent=activity.peak_metrics?.split_mode==='laps'?'Pokazano okrążenia zapisane w Garminie.':'Pokazano automatyczne odcinki kilometrowe wyliczone z próbek GPS.';
 }
+function renderMatchSprints(history) {
+  const matches=history.filter(a=>a.is_match&&a.source==='tcx').sort((a,b)=>b.date.localeCompare(a.date)).slice(0,20);
+  $('#match-sprint-table').innerHTML=matches.length?matches.map(a=>{
+    const metrics=a.peak_metrics||{},available=metrics.sprint_analysis_available===true;
+    const count=available?metrics.sprint_count:'—';
+    const distance=available?`${num(metrics.sprint_total_distance_m,0)} m`:'—';
+    const top=metrics.sprint_max_speed_kmh?`${num(metrics.sprint_max_speed_kmh,1)} km/h`:'—';
+    return '<tr><td>'+shortDay(a.date)+'</td><td>'+esc(a.kind_label)+'</td><td>'+count+(available?'<br><small>≥'+metrics.sprint_threshold_kmh+' km/h</small>':'')+'</td><td>'+distance+'</td><td>'+top+'</td></tr>';
+  }).join(''):'<tr><td colspan="5" class="empty-state">Importuj TCX bezpośrednio do zaplanowanego meczu, aby policzyć sprinty.</td></tr>';
+}
 function renderTable() {
   const filter=$('#activity-filter').value;
   const activities=data.activities.filter(a=>filter==='all'||(filter==='matches'?a.is_match:a.status===filter));
@@ -607,7 +640,8 @@ function openActivity(activity=null, day=selected, slot=null, suggestion=null) {
     const pace=activity.distance_km>0?Math.round(activity.duration_minutes/activity.distance_km*60):0;
     const powerRelevant=(activity.kind==='cycling')===(data.profile.power_sport==='cycling');
     const paceText=pace?`${Math.floor(pace/60)}:${String(pace%60).padStart(2,'0')} min/km`:'';
-    $('#imported-detail').innerHTML=`<b>TCX: ${esc(activity.imported_filename)}</b><br>Czas, dystans i HR pochodzą z pliku.${paceText?` Średnie tempo: ${paceText}.`:''}${activity.avg_power?`<br>Moc średnia ${activity.avg_power} W ${powerRelevant?`(${num(activity.avg_power/data.profile.threshold_power*100)}% progu ${data.profile.threshold_power} W)`:''}, max ${activity.max_power} W.`:''}<div class="mini-zones">${activity.zones_seconds.map((seconds,i)=>`<span style="color:${colors[i]}">Z${i+1} · ${num(seconds/60,1)} min</span>`).join('')}</div>${time(Math.max(0,activity.duration_minutes-known/60))} bez próbek HR.`;
+    const sprintSummary=activity.is_match?(activity.peak_metrics?.sprint_analysis_available?`<br><b>Sprinty:</b> ${activity.peak_metrics.sprint_count} · ≥${activity.peak_metrics.sprint_threshold_kmh} km/h · ${num(activity.peak_metrics.sprint_total_distance_m,0)} m łącznie${activity.peak_metrics.sprint_max_speed_kmh?` · max ${num(activity.peak_metrics.sprint_max_speed_kmh,1)} km/h`:''}.`:'<br>Brak gęstych próbek GPS do policzenia sprintów.') : '';
+    $('#imported-detail').innerHTML=`<b>TCX: ${esc(activity.imported_filename)}</b><br>Czas, dystans i HR pochodzą z pliku.${paceText?` Średnie tempo: ${paceText}.`:''}${activity.avg_power?`<br>Moc średnia ${activity.avg_power} W ${powerRelevant?`(${num(activity.avg_power/data.profile.threshold_power*100)}% progu ${data.profile.threshold_power} W)`:''}, max ${activity.max_power} W.`:''}${sprintSummary}<div class="mini-zones">${activity.zones_seconds.map((seconds,i)=>`<span style="color:${colors[i]}">Z${i+1} · ${num(seconds/60,1)} min</span>`).join('')}</div>${time(Math.max(0,activity.duration_minutes-known/60))} bez próbek HR.`;
   }
   $('#activity-dialog').showModal();
 }

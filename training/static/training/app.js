@@ -148,6 +148,7 @@ function renderRunningAnalysis() {
   $('#running-recovery').innerHTML=recovery.count?`${recovery.count} aktywności regeneracyjne · ${time(recovery.minutes)}${recovery.distance?` · ${num(recovery.distance,2)} km biegu regeneracyjnego`:''}`:'Zapisuj osobno lekki bieg i rozciąganie regeneracyjne, aby śledzić ich regularność.';
   renderPeakTrends(history.filter(a=>RUNNING_KINDS.has(a.kind)));
   renderSplits(history.filter(a=>RUNNING_KINDS.has(a.kind)));
+  renderMatchSprints(history);
 }
 function renderPeakTrends(activities) {
   const filter=$('#peak-kind-filter');
@@ -188,6 +189,16 @@ function renderSplits(activities) {
   }).join('');
   $('#split-note').textContent=activity.peak_metrics?.split_mode==='laps'?'Pokazano okrążenia zapisane w Garminie.':'Pokazano automatyczne odcinki kilometrowe wyliczone z próbek GPS.';
 }
+function renderMatchSprints(history) {
+  const matches=history.filter(a=>a.is_match&&a.source==='tcx').sort((a,b)=>b.date.localeCompare(a.date)).slice(0,20);
+  $('#match-sprint-table').innerHTML=matches.length?matches.map(a=>{
+    const metrics=a.peak_metrics||{},available=metrics.sprint_analysis_available===true;
+    const count=available?metrics.sprint_count:'—';
+    const distance=available?`${num(metrics.sprint_total_distance_m,0)} m`:'—';
+    const top=metrics.sprint_max_speed_kmh?`${num(metrics.sprint_max_speed_kmh,1)} km/h`:'—';
+    return '<tr><td>'+shortDay(a.date)+'</td><td>'+esc(a.kind_label)+'</td><td>'+count+(available?'<br><small>≥'+metrics.sprint_threshold_kmh+' km/h</small>':'')+'</td><td>'+distance+'</td><td>'+top+'</td></tr>';
+  }).join(''):'<tr><td colspan="5" class="empty-state">Importuj TCX bezpośrednio do zaplanowanego meczu, aby policzyć sprinty.</td></tr>';
+}
 function renderTable() {
   const filter=$('#activity-filter').value;
   const activities=data.activities.filter(a=>filter==='all'||(filter==='matches'?a.is_match:a.status===filter));
@@ -227,7 +238,8 @@ function openActivity(activity=null, day=selected, slot=null, suggestion=null) {
     const pace=activity.distance_km>0?Math.round(activity.duration_minutes/activity.distance_km*60):0;
     const powerRelevant=(activity.kind==='cycling')===(data.profile.power_sport==='cycling');
     const paceText=pace?`${Math.floor(pace/60)}:${String(pace%60).padStart(2,'0')} min/km`:'';
-    $('#imported-detail').innerHTML=`<b>TCX: ${esc(activity.imported_filename)}</b><br>Czas, dystans i HR pochodzą z pliku.${paceText?` Średnie tempo: ${paceText}.`:''}${activity.avg_power?`<br>Moc średnia ${activity.avg_power} W ${powerRelevant?`(${num(activity.avg_power/data.profile.threshold_power*100)}% progu ${data.profile.threshold_power} W)`:''}, max ${activity.max_power} W.`:''}<div class="mini-zones">${activity.zones_seconds.map((seconds,i)=>`<span style="color:${colors[i]}">Z${i+1} · ${num(seconds/60,1)} min</span>`).join('')}</div>${time(Math.max(0,activity.duration_minutes-known/60))} bez próbek HR.`;
+    const sprintSummary=activity.is_match?(activity.peak_metrics?.sprint_analysis_available?`<br><b>Sprinty:</b> ${activity.peak_metrics.sprint_count} · ≥${activity.peak_metrics.sprint_threshold_kmh} km/h · ${num(activity.peak_metrics.sprint_total_distance_m,0)} m łącznie${activity.peak_metrics.sprint_max_speed_kmh?` · max ${num(activity.peak_metrics.sprint_max_speed_kmh,1)} km/h`:''}.`:'<br>Brak gęstych próbek GPS do policzenia sprintów.') : '';
+    $('#imported-detail').innerHTML=`<b>TCX: ${esc(activity.imported_filename)}</b><br>Czas, dystans i HR pochodzą z pliku.${paceText?` Średnie tempo: ${paceText}.`:''}${activity.avg_power?`<br>Moc średnia ${activity.avg_power} W ${powerRelevant?`(${num(activity.avg_power/data.profile.threshold_power*100)}% progu ${data.profile.threshold_power} W)`:''}, max ${activity.max_power} W.`:''}${sprintSummary}<div class="mini-zones">${activity.zones_seconds.map((seconds,i)=>`<span style="color:${colors[i]}">Z${i+1} · ${num(seconds/60,1)} min</span>`).join('')}</div>${time(Math.max(0,activity.duration_minutes-known/60))} bez próbek HR.`;
   }
   $('#activity-dialog').showModal();
 }

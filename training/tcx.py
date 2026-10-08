@@ -130,6 +130,52 @@ def _peak_power(points, window=5):
     return round(best) if best is not None else None
 
 
+def _sprint_efforts(tracks, threshold_kmh=25, minimum_seconds=2):
+    efforts, eligible_intervals = [], 0
+
+    def save_bout(bout):
+        active_seconds = sum(row[1] for row in bout)
+        distance = sum(row[2] for row in bout)
+        if active_seconds < minimum_seconds or distance <= 0:
+            return
+        efforts.append({
+            'start_offset_seconds': round(bout[0][0] - workout_start, 1),
+            'duration_seconds': round(active_seconds, 1),
+            'distance_m': round(distance, 1),
+            'average_speed_kmh': round(distance / active_seconds * 3.6, 1),
+            'max_speed_kmh': round(max(row[3] for row in bout), 1),
+        })
+
+    all_times = [point[0] for track in tracks for point in track]
+    if not all_times:
+        return {'available': False, 'efforts': []}
+    workout_start = min(all_times)
+    for track in tracks:
+        points = sorted((p for p in track if p[0] is not None and p[1] is not None), key=lambda p: p[0])
+        bout = []
+        for previous, current in zip(points, points[1:]):
+            elapsed = current[0] - previous[0]
+            if elapsed <= 0 or elapsed > 3:
+                if bout:
+                    save_bout(bout)
+                    bout = []
+                continue
+            eligible_intervals += 1
+            distance = current[1] - previous[1]
+            speed = distance / elapsed * 3.6
+            if threshold_kmh <= speed <= 45 and distance > 0:
+                if bout and previous[0] - bout[-1][0] - bout[-1][1] > 2:
+                    save_bout(bout)
+                    bout = []
+                bout.append((previous[0], elapsed, distance, speed))
+            elif bout and current[0] - bout[-1][0] - bout[-1][1] > 2:
+                save_bout(bout)
+                bout = []
+        if bout:
+            save_bout(bout)
+    return {'available': eligible_intervals >= 2, 'efforts': efforts}
+
+
 def parse_tcx(data):
     if not data or len(data) > 10 * 1024 * 1024:
         raise TCXError('Plik TCX musi mieć od 1 bajta do 10 MB.')
@@ -148,7 +194,7 @@ def parse_tcx(data):
     segments = defaultdict(float)
     power_weighted = power_seconds = 0
     fallback_distance = 0
-    all_track_points, lap_records = [], []
+    all_track_points, lap_records, sprint_tracks = [], [], []
     for lap in _children(activity, 'Lap'):
         if lap.get('StartTime'):
             starts.append(_time(lap.get('StartTime')))
@@ -160,6 +206,7 @@ def parse_tcx(data):
         lap_points = []
         for track in _children(lap, 'Track'):
             previous = None
+            sprint_track = []
             for point in _children(track, 'Trackpoint'):
                 times = _children(point, 'Time')
                 timestamp = _time(times[0].text) if times else None
@@ -176,6 +223,7 @@ def parse_tcx(data):
                     timestamps.append(timestamp)
                 if timestamp and distance is not None:
                     lap_points.append((timestamp.timestamp(), distance, hr, power))
+                    sprint_track.append((timestamp.timestamp(), distance))
                 if hr:
                     hearts.append(hr)
                 if previous:
@@ -191,6 +239,8 @@ def parse_tcx(data):
                     if distance is not None and prev_distance is not None:
                         fallback_distance += max(0, distance - prev_distance)
                 previous = (timestamp, hr, distance, power)
+            if len(sprint_track) > 1:
+                sprint_tracks.append(sprint_track)
         lap_points.sort(key=lambda point: point[0])
         all_track_points.extend(lap_points)
         lap_duration = _number(lap, 'TotalTimeSeconds')
@@ -253,6 +303,16 @@ def parse_tcx(data):
         'max_hr_bpm': max_hr,
         'split_mode': split_mode,
     }
+    sprint_analysis = _sprint_efforts(sprint_tracks)
+    peak_metrics.update({
+        'sprint_threshold_kmh': 25,
+        'sprint_minimum_seconds': 2,
+        'sprint_analysis_available': sprint_analysis['available'],
+        'sprint_count': len(sprint_analysis['efforts']) if sprint_analysis['available'] else None,
+        'sprint_total_distance_m': round(sum(e['distance_m'] for e in sprint_analysis['efforts']), 1),
+        'sprint_max_speed_kmh': max((e['max_speed_kmh'] for e in sprint_analysis['efforts']), default=None),
+        'sprint_efforts': sprint_analysis['efforts'],
+    })
     return {
         'date': min(times).astimezone(ZoneInfo('Europe/Warsaw')).date(),
         'duration_seconds': round(duration, 2),
